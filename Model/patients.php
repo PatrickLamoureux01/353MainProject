@@ -10,6 +10,16 @@ function create_person($medicare, $fname, $lname, $dob, $email, $city, $telNum, 
     mysqli_stmt_close($insert_stmt);
 }
 
+function edit_person($medicare, $fname, $lname, $dob, $email, $city, $telNum, $citizenship, $province, $address, $postal, $region, $link)
+{
+
+    $sql = "UPDATE person SET firstName = ?, lastName = ?, dob = ?, email = ?, city = ?, telNum = ?, citizenship = ?, province = ?, address = ?, postalCode = ?, region = ? WHERE medicareNum = ?";
+    $update_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($update_stmt, 'ssssssssssii',$fname,$lname,$dob,$email,$city,$telNum,$citizenship,$province,$address,$postal,$region,$medicare);
+    mysqli_stmt_execute($update_stmt);
+    mysqli_stmt_close($update_stmt);
+}
+
 function get_Fname($link, $medicare)
 {
 
@@ -48,4 +58,16 @@ function get_all_patients($link)
     mysqli_stmt_close($select_stmt);
 
     return $patients;
+}
+
+function get_patient_by_medicare($link,$medicare) {
+
+    $sql = "SELECT * FROM person WHERE medicareNum = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt,'i',$medicare);
+    mysqli_stmt_execute($select_stmt);
+    $patient = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $patient;
 }

@@ -155,7 +155,7 @@ $regions = get_all_regions($link);
                         <h1 class="h3 mb-0 text-gray-800">Create Patient</h1>
                     </div>
 
-                    <form action="Model/create_patient.php" method="post">
+                    <form action="Model/patient_processor.php?action=create" method="post">
                         <div class="form-group">
                             <label for="MedicareNum" class="my-1 mr-2">Medicare Number </label>
                             <input type="text" class="form-control" id="medicareNum" name="medicareNum">

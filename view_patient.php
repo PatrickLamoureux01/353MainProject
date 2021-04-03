@@ -8,7 +8,13 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$patients = get_all_patients($link);
+$patientID = $_GET["pid"];
+
+$patient_name = get_full_name($link,$patientID);
+
+$p = get_patient_by_medicare($link, $patientID);
+$patient = mysqli_fetch_array($p);
+
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +28,7 @@ $patients = get_all_patients($link);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>View All Patients</title>
+    <title>View Patient - <?php echo $patient_name; ?></title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -30,9 +36,6 @@ $patients = get_all_patients($link);
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Data Tables -->
-    <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -155,83 +158,32 @@ $patients = get_all_patients($link);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Patients Overview</h1>
+                        <h1 class="h3 mb-0 text-gray-800"><?php echo $patient_name?>'s Full Profile</h1>
                     </div>
 
-                    <div class="col pr-4 pt-4 text-right">
-                        <a id="editbutton" class="m-0 pt-4 font-weight-bold text-primary" href="create_patient_admin.php"><i class="fa fa-plus"></i> Create New Patient</a>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <div class="col-xl-12 mb-4">
-                            <!-- DataTales Example -->
-                            <div class="card shadow">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">All Patients</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-sm" id="patientTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>First Name</th>
-                                                    <th>Last Name</th>
-                                                    <th>Medicare Number</th>
-                                                    <th>DOB</th>
-                                                    <th>E-mail</th>
-                                                    <th>Address</th>
-                                                    <th>Region</th>
-                                                    <th></th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                <?php
-
-                                                if (sizeof($patients) == 0) {
-                                                    echo ('<tr>
-          <td>   </td> 
-          <td> There are no patients to display. </td> 
-        </tr>');
-                                                } else {
-                                                    foreach ($patients as $patient) {
-                                                        echo ('<tr class="clickable-row" data-href="view_patient.php?pid=');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('"><td>');
-                                                        echo ($patient['firstName']);
-                                                        echo ('</td><td>');
-                                                        echo ($patient['lastName']);
-                                                        echo ('</td><td>');
-                                                        echo ($patient['medicareNum']);
-                                                        echo ('</td><td>');
-                                                        echo ($patient['dob']);
-                                                        echo ('</td><td>');
-                                                        echo ($patient['email']);
-                                                        echo ('</td><td>');
-                                                        echo ($patient['address']);
-                                                        echo ('</td><td>');
-                                                        echo ($patient['region']);
-                                                        echo ('</td><td class="non-clickable-row" data-href="edit_patient.php?pid=');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('"><button type="button" class="btn btn-secondary">Edit</button>');
-                                                        echo ('</td><td class="non-clickable-row"><button type="button" class="btn btn-danger" onclick="delete_patient(');
-                                                        echo $patient['medicareNum'];
-                                                        echo (')">Delete</button>');
-                                                        echo ('</td></tr>');
-                                                    }
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="card flex-row flex-wrap">
+                        <div class="card-header border-0">
+                            <img src="//placehold.it/200" alt="">
                         </div>
+                        <div class="card-block px-2">
+    
 
+                            <h4 class="card-title" style="text-decoration:underline;">Patient Information</h4>
+                            <p class="card-text"><strong>Medicare Number:</strong> <?php echo ($patient['medicareNum']); ?></p>
+                            <p class="card-text"><strong>First Name:</strong> <?php echo ($patient['firstName']); ?></p>
+                            <p class="card-text"><strong>Last Name:</strong> <?php echo ($patient['lastName']); ?></p>
+                            <p class="card-text"><strong>Date of Birth:</strong> <?php echo ($patient['dob']); ?></p>
+                            <p class="card-text"><strong>Email Address:</strong> <?php echo ($patient['email']); ?></p>
+                            <p class="card-text"><strong>City:</strong> <?php echo ($patient['city']); ?></p>
+                            <p class="card-text"><strong>Telephone Number:</strong> <?php echo ($patient['telNum']); ?></p>
+                            <p class="card-text"><strong>Citizenship:</strong> <?php echo ($patient['citizenship']); ?></p>
+                            <p class="card-text"><strong>Province:</strong> <?php echo ($patient['province']); ?></p>
+                            <p class="card-text"><strong>Address:</strong> <?php echo ($patient['address']); ?></p>
+                            <p class="card-text"><strong>Postal Code:</strong> <?php echo ($patient['postalCode']); ?></p>
+                            <p class="card-text"><strong>Region:</strong> <?php echo get_region_name_by_id($link,$patient['region']); ?></p>
+                        </div>
                     </div>
+
 
                 </div>
                 <!-- /.container-fluid -->
@@ -295,27 +247,6 @@ $patients = get_all_patients($link);
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
-
-    <!-- Data Tables -->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#patientTable').DataTable();
-
-            $(".non-clickable-row").click(function(e) {
-                e.stopPropagation();
-                window.location = $(this).data("href");
-            });
-
-            $(".clickable-row").click(function(e) {
-                window.location = $(this).data("href");
-            });
-        });
-
-    </script>
-
 
 </body>
 
