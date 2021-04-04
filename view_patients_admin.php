@@ -34,6 +34,9 @@ $patients = get_all_patients($link);
     <!-- Data Tables -->
     <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
 
+    <!-- Toastr -->
+    <link href="css/toastr.min.css" rel="stylesheet">
+
 </head>
 
 <body id="page-top">
@@ -198,28 +201,42 @@ $patients = get_all_patients($link);
         </tr>');
                                                 } else {
                                                     foreach ($patients as $patient) {
-                                                        echo ('<tr class="clickable-row" data-href="view_patient.php?pid=');
+                                                        echo ('<tr><td class="clickable" data-href="view_patient.php?pid=');
                                                         echo $patient['medicareNum'];
-                                                        echo ('"><td>');
+                                                        echo ('">');
                                                         echo ($patient['firstName']);
-                                                        echo ('</td><td>');
+                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo $patient['medicareNum'];
+                                                        echo ('">');
                                                         echo ($patient['lastName']);
-                                                        echo ('</td><td>');
+                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo $patient['medicareNum'];
+                                                        echo ('">');
                                                         echo ($patient['medicareNum']);
-                                                        echo ('</td><td>');
+                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo $patient['medicareNum'];
+                                                        echo ('">');
                                                         echo ($patient['dob']);
-                                                        echo ('</td><td>');
+                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo $patient['medicareNum'];
+                                                        echo ('">');
                                                         echo ($patient['email']);
-                                                        echo ('</td><td>');
+                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo $patient['medicareNum'];
+                                                        echo ('">');
                                                         echo ($patient['address']);
-                                                        echo ('</td><td>');
+                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo $patient['medicareNum'];
+                                                        echo ('">');
                                                         echo ($patient['region']);
-                                                        echo ('</td><td class="non-clickable-row" data-href="edit_patient.php?pid=');
+                                                        echo ('</td><td class="clickable" data-href="edit_patient.php?pid=');
                                                         echo $patient['medicareNum'];
                                                         echo ('"><button type="button" class="btn btn-secondary">Edit</button>');
-                                                        echo ('</td><td class="non-clickable-row"><button type="button" class="btn btn-danger" onclick="delete_patient(');
+                                                        echo ('</td><td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePatientModal" data-id="');
                                                         echo $patient['medicareNum'];
-                                                        echo (')">Delete</button>');
+                                                        echo ('" data-name="');
+                                                        echo ($patient['firstName'] . $patient['lastName']);
+                                                        echo('">Delete</button>');
                                                         echo ('</td></tr>');
                                                     }
                                                 }
@@ -279,6 +296,25 @@ $patients = get_all_patients($link);
         </div>
     </div>
 
+    <!-- Delete Patient Modal-->
+    <div class="modal fade" id="deletePatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to continue?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="delete_txt"></p>
+                    <p id="tmp_r"></p>
+                    <button type="button" onclick="reject_ft()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Patient</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -300,20 +336,32 @@ $patients = get_all_patients($link);
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
+    <!-- Toastr -->
+    <script src="js/toastr.min.js"></script>
+
     <script>
         $(document).ready(function() {
             $('#patientTable').DataTable();
 
-            $(".non-clickable-row").click(function(e) {
+            $(".non-clickable-edit").click(function(e) {
                 e.stopPropagation();
                 window.location = $(this).data("href");
             });
 
-            $(".clickable-row").click(function(e) {
+            $(".clickable").click(function(e) {
                 window.location = $(this).data("href");
             });
+
         });
 
+        $('#deletePatientModal').on('show.bs.modal', function(event) {
+
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var name = button.data('name') // Extract FT id
+
+            $('#delete_txt').html("You are about to delete <strong>" + name + "</strong> from the patient records.");
+            $('#tmp_r').val(id);
+        });
     </script>
 
 
