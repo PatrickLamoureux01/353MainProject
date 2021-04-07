@@ -185,7 +185,6 @@ $patients = get_all_patients($link);
                                                     <th>DOB</th>
                                                     <th>E-mail</th>
                                                     <th>Address</th>
-                                                    <th>Region</th>
                                                     <th></th>
                                                     <th></th>
                                                 </tr>
@@ -225,10 +224,6 @@ $patients = get_all_patients($link);
                                                         echo $patient['medicareNum'];
                                                         echo ('">');
                                                         echo ($patient['address']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('">');
-                                                        echo ($patient['region']);
                                                         echo ('</td><td class="clickable" data-href="edit_patient.php?pid=');
                                                         echo $patient['medicareNum'];
                                                         echo ('"><button type="button" class="btn btn-secondary">Edit</button>');

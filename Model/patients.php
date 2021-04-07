@@ -1,21 +1,21 @@
 <?php
 
-function create_person($medicare, $fname, $lname, $dob, $email, $city, $telNum, $citizenship, $province, $address, $postal, $region, $link)
+function create_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link)
 {
 
-    $sql = "INSERT INTO person(medicareNum,firstName,lastName,dob,email,city,telNum,citizenship,province,address,postalCode,region) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO person(medicareNum,firstName,lastName,dob,email,telNum,citizenship,province,address,postalCode) VALUES(,?,?,?,?,?,?,?,?,?,?)";
     $insert_stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($insert_stmt, 'issssssssssi',$medicare,$fname,$lname,$dob,$email,$city,$telNum,$citizenship,$province,$address,$postal,$region);
+    mysqli_stmt_bind_param($insert_stmt, 'isssssssss',$medicare,$fname,$lname,$dob,$email,$telNum,$citizenship,$province,$address,$postal);
     mysqli_stmt_execute($insert_stmt);
     mysqli_stmt_close($insert_stmt);
 }
 
-function edit_person($medicare, $fname, $lname, $dob, $email, $city, $telNum, $citizenship, $province, $address, $postal, $region, $link)
+function edit_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link)
 {
 
-    $sql = "UPDATE person SET firstName = ?, lastName = ?, dob = ?, email = ?, city = ?, telNum = ?, citizenship = ?, province = ?, address = ?, postalCode = ?, region = ? WHERE medicareNum = ?";
+    $sql = "UPDATE person SET firstName = ?, lastName = ?, dob = ?, email = ?, telNum = ?, citizenship = ?, province = ?, address = ?, postalCode = ? WHERE medicareNum = ?";
     $update_stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($update_stmt, 'ssssssssssii',$fname,$lname,$dob,$email,$city,$telNum,$citizenship,$province,$address,$postal,$region,$medicare);
+    mysqli_stmt_bind_param($update_stmt, 'sssssssssi',$fname,$lname,$dob,$email,$telNum,$citizenship,$province,$address,$postal,$medicare);
     mysqli_stmt_execute($update_stmt);
     mysqli_stmt_close($update_stmt);
 }

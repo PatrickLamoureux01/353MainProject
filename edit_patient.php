@@ -183,10 +183,6 @@ $patient = mysqli_fetch_array($p);
                             <input type="email" class="form-control" id="email" name="email" value="<?php echo $patient['email'];?>">
                         </div>
                         <div class="form-group">
-                            <label for="city" class="my-1 mr-2">City </label>
-                            <input type="text" class="form-control" id="city" name="city" value="<?php echo $patient['city'];?>">
-                        </div>
-                        <div class="form-group">
                             <label for="telNum" class="my-1 mr-2">Telephone Number </label>
                             <input type="text" class="form-control" id="telNum" name="telNum" value="<?php echo $patient['telNum'];?>">
                         </div>
@@ -205,20 +201,6 @@ $patient = mysqli_fetch_array($p);
                         <div class="form-group">
                             <label for="postal" class="my-1 mr-2">Postal Code </label>
                             <input type="text" class="form-control" id="postal" name="postal" value="<?php echo $patient['postalCode'];?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="region" class="my-1 mr-2">Region</label>
-                            <select class="custom-select my-1 mr-sm-2" name="region" id="region" onChange="display_subtasks()">
-                                <option selected><?php echo  get_region_name_by_id($link,$patient['region']);?></option>
-                                <?php
-                                foreach ($regions as $region) {
-                                ?>
-                                
-                                    <option value="<?php echo $region['name']; ?>"><?php echo $region['name']; ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
                         </div>
                         <button type="submit" class="btn btn-outline-primary">Update Patient</button>
 
