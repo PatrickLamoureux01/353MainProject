@@ -34,9 +34,6 @@ $patients = get_all_patients($link);
     <!-- Data Tables -->
     <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
 
-    <!-- Toastr -->
-    <link href="css/toastr.min.css" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
@@ -230,8 +227,8 @@ $patients = get_all_patients($link);
                                                         echo ('</td><td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePatientModal" data-id="');
                                                         echo $patient['medicareNum'];
                                                         echo ('" data-name="');
-                                                        echo ($patient['firstName'] . $patient['lastName']);
-                                                        echo('">Delete</button>');
+                                                        echo ($patient['firstName'] . " " . $patient['lastName']);
+                                                        echo ('">Delete</button>');
                                                         echo ('</td></tr>');
                                                     }
                                                 }
@@ -303,8 +300,8 @@ $patients = get_all_patients($link);
                 </div>
                 <div class="modal-body">
                     <p id="delete_txt"></p>
-                    <p id="tmp_r"></p>
-                    <button type="button" onclick="reject_ft()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Patient</button>
+                    <p id="tmp"></p>
+                    <button type="button" onclick="delete_patient()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Patient</button>
                 </div>
             </div>
         </div>
@@ -328,20 +325,11 @@ $patients = get_all_patients($link);
     <script src="js/demo/chart-pie-demo.js"></script>
 
     <!-- Data Tables -->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-
-    <!-- Toastr -->
-    <script src="js/toastr.min.js"></script>
 
     <script>
         $(document).ready(function() {
             $('#patientTable').DataTable();
-
-            $(".non-clickable-edit").click(function(e) {
-                e.stopPropagation();
-                window.location = $(this).data("href");
-            });
 
             $(".clickable").click(function(e) {
                 window.location = $(this).data("href");
@@ -349,16 +337,33 @@ $patients = get_all_patients($link);
 
         });
 
-        $('#deletePatientModal').on('show.bs.modal', function(event) {
+        $('#deletePatientModal').on('shown.bs.modal', function(event) {
+
 
             var button = $(event.relatedTarget) // Button that triggered the modal
-            var name = button.data('name') // Extract FT id
+            var name = button.data('name') // Extract patient name
+            var id = button.data('id') // Extract patient ID
 
             $('#delete_txt').html("You are about to delete <strong>" + name + "</strong> from the patient records.");
-            $('#tmp_r').val(id);
+            $('#tmp').val(id);
         });
-    </script>
 
+        function delete_patient() {
+
+            var id = $('#tmp').val();
+
+            $.ajax({
+                type: "POST",
+                url: "Model/patient_processor.php?action=delete",
+                data: {
+                    action: "delete",
+                    id: id
+                }
+            }).done(function(msg) {
+                parent.window.location.reload();
+            });
+        }
+    </script>
 
 </body>
 

@@ -20,6 +20,16 @@ function edit_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizens
     mysqli_stmt_close($update_stmt);
 }
 
+function delete_person($medicare, $link)
+{
+
+    $sql = "DELETE FROM person WHERE medicareNum = ?";
+    $delete_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($delete_stmt, 'i',$medicare);
+    mysqli_stmt_execute($delete_stmt);
+    mysqli_stmt_close($delete_stmt);
+}
+
 function get_Fname($link, $medicare)
 {
 
