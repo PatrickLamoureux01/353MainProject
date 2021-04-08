@@ -221,7 +221,7 @@ $workers = get_all_health_workers($link);
                                                         echo $worker['medicareNum'];
                                                         echo ('">');
                                                         echo ($worker['address']);
-                                                        echo ('</td><td class="clickable" data-href="edit_patient.php?pid=');
+                                                        echo ('</td><td class="clickable" data-href="edit_health_worker.php?pid=');
                                                         echo $worker['medicareNum'];
                                                         echo ('"><button type="button" class="btn btn-secondary">Edit</button>');
                                                         echo ('</td><td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWorkerModal" data-id="');

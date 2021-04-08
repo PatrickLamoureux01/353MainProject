@@ -8,12 +8,14 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$patientID = $_GET["pid"];
+$personID = $_GET["pid"];
 
-$patient_name = get_full_name($link,$patientID);
+$patient_name = get_full_name($link, $personID);
 
-$p = get_patient_by_medicare($link, $patientID);
-$patient = mysqli_fetch_array($p);
+$p = get_patient_by_medicare($link, $personID);
+$person = mysqli_fetch_array($p);
+
+$isAdmin = check_admin($personID, $link);
 
 ?>
 
@@ -28,7 +30,7 @@ $patient = mysqli_fetch_array($p);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>View Patient - <?php echo $patient_name; ?></title>
+    <title>View Health Worker - <?php echo $patient_name; ?></title>
 
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -161,7 +163,7 @@ $patient = mysqli_fetch_array($p);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800"><?php echo $patient_name?>'s Full Profile</h1>
+                        <h1 class="h3 mb-0 text-gray-800"><?php echo $patient_name ?>'s Full Profile</h1>
                     </div>
 
                     <div class="card flex-row flex-wrap">
@@ -169,19 +171,27 @@ $patient = mysqli_fetch_array($p);
                             <img src="//placehold.it/200" alt="">
                         </div>
                         <div class="card-block px-2">
-    
 
-                            <h4 class="card-title" style="text-decoration:underline;">Patient Information</h4>
-                            <p class="card-text"><strong>Medicare Number:</strong> <?php echo ($patient['medicareNum']); ?></p>
-                            <p class="card-text"><strong>First Name:</strong> <?php echo ($patient['firstName']); ?></p>
-                            <p class="card-text"><strong>Last Name:</strong> <?php echo ($patient['lastName']); ?></p>
-                            <p class="card-text"><strong>Date of Birth:</strong> <?php echo ($patient['dob']); ?></p>
-                            <p class="card-text"><strong>Email Address:</strong> <?php echo ($patient['email']); ?></p>
-                            <p class="card-text"><strong>Telephone Number:</strong> <?php echo ($patient['telNum']); ?></p>
-                            <p class="card-text"><strong>Citizenship:</strong> <?php echo ($patient['citizenship']); ?></p>
-                            <p class="card-text"><strong>Province:</strong> <?php echo ($patient['province']); ?></p>
-                            <p class="card-text"><strong>Address:</strong> <?php echo ($patient['address']); ?></p>
-                            <p class="card-text"><strong>Postal Code:</strong> <?php echo ($patient['postalCode']); ?></p>
+
+                            <h4 class="card-title" style="text-decoration:underline;">Health Worker Information</h4>
+                            <p class="card-text"><strong>Medicare Number:</strong> <?php echo ($person['medicareNum']); ?></p>
+                            <p class="card-text"><strong>First Name:</strong> <?php echo ($person['firstName']); ?></p>
+                            <p class="card-text"><strong>Last Name:</strong> <?php echo ($person['lastName']); ?></p>
+                            <p class="card-text"><strong>Date of Birth:</strong> <?php echo ($person['dob']); ?></p>
+                            <p class="card-text"><strong>Email Address:</strong> <?php echo ($person['email']); ?></p>
+                            <p class="card-text"><strong>Telephone Number:</strong> <?php echo ($person['telNum']); ?></p>
+                            <p class="card-text"><strong>Citizenship:</strong> <?php echo ($person['citizenship']); ?></p>
+                            <p class="card-text"><strong>Province:</strong> <?php echo ($person['province']); ?></p>
+                            <p class="card-text"><strong>Address:</strong> <?php echo ($person['address']); ?></p>
+                            <p class="card-text"><strong>Postal Code:</strong> <?php echo ($person['postalCode']); ?></p>
+                            <p class="card-text"><strong>Administrative Priviliges:</strong>
+                                <?php
+                                if ($isAdmin == "0") {
+                                    echo "No";
+                                } else {
+                                    echo "Yes";
+                                }
+                                ?></p>
                         </div>
                     </div>
 

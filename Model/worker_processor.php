@@ -19,14 +19,26 @@ if ($action == "create" || $action == "edit") {
     $address = $_POST["address"];
     $postal = $_POST["postal"];
 
+    if (isset($_POST["isAdmin"])) {
+        $adm = 1;
+    } else {
+        $adm = 0;
+    }
     if ($action == "create") {
-        create_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link);
-        header('Location: ../Person/view_patients_admin.php');
+        $flag = does_person_already_exist($medicare, $link);
+        if ($flag) { // person already exists
+            create_health_worker($medicare, $adm, $link);
+        } else {
+            create_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link);
+            create_health_worker($medicare, $adm, $link);
+        }
+        header('Location: ../HealthWorker/view_health_workers.php');
     } else {
         edit_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link);
-        header('Location: ../Person/view_patients_admin.php');
+        edit_health_worker($medicare,$adm,$link);
+        header('Location: ../HealthWorker/view_health_workers.php');
     }
 } else if ($action == "delete") {
     $id = $_POST["id"];
-    delete_person($id, $link);
+    delete_health_worker($id, $link);
 }

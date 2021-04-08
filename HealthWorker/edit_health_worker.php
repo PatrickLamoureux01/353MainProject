@@ -10,10 +10,12 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
 $regions = get_all_regions($link);
 
-$patientID = $_GET["pid"];
+$personID = $_GET["pid"];
 
-$p = get_patient_by_medicare($link,$patientID);
+$p = get_patient_by_medicare($link, $personID);
 $patient = mysqli_fetch_array($p);
+
+$isAdmin = check_admin($personID, $link);
 
 ?>
 
@@ -28,7 +30,7 @@ $patient = mysqli_fetch_array($p);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Edit Patient - <?php echo $fname; ?></title>
+    <title>Edit Health Worker - <?php echo $fname; ?></title>
 
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -158,49 +160,57 @@ $patient = mysqli_fetch_array($p);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Edit Patient</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Edit Health Worker</h1>
                     </div>
 
-                    <form action="../Model/patient_processor.php?action=edit" method="post">
+                    <form action="../Model/worker_processor.php?action=edit" method="post">
                         <div class="form-group">
                             <label for="MedicareNum" class="my-1 mr-2">Medicare Number </label>
-                            <input type="text" class="form-control" id="medicareNum" name="medicareNum" value="<?php echo $patient["medicareNum"];?>" readonly>
+                            <input type="text" class="form-control" id="medicareNum" name="medicareNum" value="<?php echo $patient["medicareNum"]; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="fName" class="my-1 mr-2">First Name </label>
-                            <input type="text" class="form-control" id="fName" name="fName" value="<?php echo $patient['firstName'];?>">
+                            <input type="text" class="form-control" id="fName" name="fName" value="<?php echo $patient['firstName']; ?>">
                         </div>
                         <div class="form-group">
                             <label for="lName" class="my-1 mr-2">Last Name </label>
-                            <input type="text" class="form-control" id="lName" name="lName" value="<?php echo $patient['lastName'];?>">
+                            <input type="text" class="form-control" id="lName" name="lName" value="<?php echo $patient['lastName']; ?>">
                         </div>
                         <div class="form-group">
                             <label for="dob" class="my-1 mr-2">Date of Birth</label>
-                            <input type="date" class="form-control" id="dob" name="dob" value="<?php echo $patient['dob'];?>">
+                            <input type="date" class="form-control" id="dob" name="dob" value="<?php echo $patient['dob']; ?>">
                         </div>
                         <div class="form-group">
                             <label for="email" class="my-1 mr-2">E-mail </label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?php echo $patient['email'];?>">
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo $patient['email']; ?>">
                         </div>
                         <div class="form-group">
                             <label for="telNum" class="my-1 mr-2">Telephone Number </label>
-                            <input type="text" class="form-control" id="telNum" name="telNum" value="<?php echo $patient['telNum'];?>">
+                            <input type="text" class="form-control" id="telNum" name="telNum" value="<?php echo $patient['telNum']; ?>">
                         </div>
                         <div class="form-group">
                             <label for="citizenship" class="my-1 mr-2">Citizenship </label>
-                            <input type="text" class="form-control" id="citizenship" name="citizenship" value="<?php echo $patient['citizenship'];?>">
+                            <input type="text" class="form-control" id="citizenship" name="citizenship" value="<?php echo $patient['citizenship']; ?>">
                         </div>
                         <div class="form-group">
                             <label for="province" class="my-1 mr-2">Province </label>
-                            <input type="text" class="form-control" id="province" name="province" value="<?php echo $patient['province'];?>">
+                            <input type="text" class="form-control" id="province" name="province" value="<?php echo $patient['province']; ?>">
                         </div>
                         <div class="form-group">
                             <label for="address" class="my-1 mr-2">Address </label>
-                            <input type="text" class="form-control" id="address" name="address" value="<?php echo $patient['address'];?>">
+                            <input type="text" class="form-control" id="address" name="address" value="<?php echo $patient['address']; ?>">
                         </div>
                         <div class="form-group">
                             <label for="postal" class="my-1 mr-2">Postal Code </label>
-                            <input type="text" class="form-control" id="postal" name="postal" value="<?php echo $patient['postalCode'];?>">
+                            <input type="text" class="form-control" id="postal" name="postal" value="<?php echo $patient['postalCode']; ?>">
+                        </div>
+                        <div class="form-check">
+                            <?php if ($isAdmin == "0") {
+                                ?><input class="form-check-input" type="checkbox" name="isAdmin" id="isAdmin"> <?php
+                            } else {
+                                ?><input class="form-check-input" type="checkbox" name="isAdmin" id="isAdmin" checked> <?php
+                            } ?>
+                            <label class="form-check-label" for="isAdmin">Grant Admin Privileges?</label>
                         </div>
                         <button type="submit" class="btn btn-outline-primary">Update Patient</button>
 

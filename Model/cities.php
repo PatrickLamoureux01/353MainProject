@@ -11,7 +11,7 @@ function get_all_cities($link) {
     return $cities;
 }
 
-function get_postal_codes_by_city($city,$link) {
+function get_postal_codes_by_city($link,$city) {
 
     $sql = "SELECT postalCode FROM cityPostal WHERE cityID = (SELECT cityID FROM city WHERE name = ?)";
     $select_stmt = mysqli_prepare($link,$sql);

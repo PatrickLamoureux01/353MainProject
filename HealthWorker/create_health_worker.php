@@ -23,7 +23,7 @@ $cities = get_all_cities($link);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Create Patient - <?php echo $fname; ?></title>
+    <title>Create Health Worker - <?php echo $fname; ?></title>
 
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -156,45 +156,45 @@ $cities = get_all_cities($link);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Create Patient</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Create Health Worker</h1>
                     </div>
 
-                    <form action="../Model/patient_processor.php?action=create" method="post">
+                    <form action="../Model/worker_processor.php?action=create" method="post">
                         <div class="form-group">
                             <label for="MedicareNum" class="my-1 mr-2">Medicare Number </label>
-                            <input type="text" class="form-control" id="medicareNum" name="medicareNum">
+                            <input type="text" class="form-control" id="medicareNum" name="medicareNum" required>
                         </div>
                         <div class="form-group">
                             <label for="fName" class="my-1 mr-2">First Name </label>
-                            <input type="text" class="form-control" id="fName" name="fName">
+                            <input type="text" class="form-control" id="fName" name="fName" required>
                         </div>
                         <div class="form-group">
                             <label for="lName" class="my-1 mr-2">Last Name </label>
-                            <input type="text" class="form-control" id="lName" name="lName">
+                            <input type="text" class="form-control" id="lName" name="lName" required>
                         </div>
                         <div class="form-group">
                             <label for="dob" class="my-1 mr-2">Date of Birth</label>
-                            <input type="date" class="form-control" id="dob" name="dob">
+                            <input type="date" class="form-control" id="dob" name="dob" required>
                         </div>
                         <div class="form-group">
                             <label for="email" class="my-1 mr-2">E-mail </label>
-                            <input type="email" class="form-control" id="email" name="email">
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="form-group">
                             <label for="telNum" class="my-1 mr-2">Telephone Number </label>
-                            <input type="text" class="form-control" id="telNum" name="telNum">
+                            <input type="text" class="form-control" id="telNum" name="telNum" required>
                         </div>
                         <div class="form-group">
                             <label for="citizenship" class="my-1 mr-2">Citizenship </label>
-                            <input type="text" class="form-control" id="citizenship" name="citizenship">
+                            <input type="text" class="form-control" id="citizenship" name="citizenship" required>
                         </div>
                         <div class="form-group">
                             <label for="province" class="my-1 mr-2">Province </label>
-                            <input type="text" class="form-control" id="province" name="province">
+                            <input type="text" class="form-control" id="province" name="province" required>
                         </div>
                         <div class="form-group">
                             <label for="address" class="my-1 mr-2">Address </label>
-                            <input type="text" class="form-control" id="address" name="address">
+                            <input type="text" class="form-control" id="address" name="address" required>
                         </div>
                         <div class="form-group">
                             <label for="postal" class="my-1 mr-2">Postal Code </label><br>
@@ -202,7 +202,7 @@ $cities = get_all_cities($link);
                                 <?php
 
                                 foreach ($cities as $c) {
-                                    $x = get_postal_codes_by_city($c['name'], $link);
+                                    $x = get_postal_codes_by_city($link, $c['name']);
                                 ?>
                                     <optgroup label="<?php echo $c['name']; ?>">
                                         <?php
@@ -217,7 +217,11 @@ $cities = get_all_cities($link);
                                 ?>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-outline-primary">Create Patient</button>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="isAdmin" id="isAdmin">
+                            <label class="form-check-label" for="isAdmin">Grant Admin Privileges?</label>
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">Create Health Worker</button>
 
                     </form>
 
