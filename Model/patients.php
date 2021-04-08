@@ -3,7 +3,7 @@
 function create_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link)
 {
 
-    $sql = "INSERT INTO person(medicareNum,firstName,lastName,dob,email,telNum,citizenship,province,address,postalCode) VALUES(,?,?,?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO person(medicareNum,firstName,lastName,dob,email,telNum,citizenship,province,address,postalCode) VALUES(?,?,?,?,?,?,?,?,?,?)";
     $insert_stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($insert_stmt, 'isssssssss',$medicare,$fname,$lname,$dob,$email,$telNum,$citizenship,$province,$address,$postal);
     mysqli_stmt_execute($insert_stmt);

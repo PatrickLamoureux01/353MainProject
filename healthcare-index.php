@@ -249,11 +249,11 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
     <script>
         function view_patients() {
-            window.location.href="view_patients.php";
+            window.location.href="Person/view_patients.php";
         }
 
         function create_patient() {
-            window.location.href="create_patient.php";
+            window.location.href="Person/create_patient.php";
         }
     </script>
 

@@ -1,5 +1,5 @@
 <?php
-include_once('header.php');
+include_once('../header.php');
 session_start();
 
 $db = new dbmysqli();
@@ -8,7 +8,7 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$patients = get_all_patients($link);
+$cities = get_all_cities($link);
 ?>
 
 <!DOCTYPE html>
@@ -22,17 +22,18 @@ $patients = get_all_patients($link);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>View All Patients</title>
+    <title>Create Patient - <?php echo $fname; ?></title>
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
-    <!-- Data Tables -->
-    <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
 </head>
 
@@ -45,7 +46,7 @@ $patients = get_all_patients($link);
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="healthcare-index.php">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../healthcare-index.php">
                 <div class="sidebar-brand-icon">
                     <i class="fab fa-canadian-maple-leaf"></i>
                 </div>
@@ -57,7 +58,7 @@ $patients = get_all_patients($link);
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="healthcare-index.php">
+                <a class="nav-link" href="../healthcare-index.php">
                     <i class="fas fa-columns"></i>
                     <span>Health Worker Dashboard</span></a>
             </li>
@@ -121,7 +122,7 @@ $patients = get_all_patients($link);
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $fullname; ?></span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -155,78 +156,70 @@ $patients = get_all_patients($link);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Patients Overview</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Create Patient</h1>
                     </div>
 
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <div class="col-xl-12 mb-4">
-                            <!-- DataTales Example -->
-                            <div class="card shadow">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">All Patients</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-sm" id="patientTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>First Name</th>
-                                                    <th>Last Name</th>
-                                                    <th>Medicare Number</th>
-                                                    <th>DOB</th>
-                                                    <th>E-mail</th>
-                                                    <th>Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                <?php
-
-                                                if (sizeof($patients) == 0) {
-                                                    echo ('<tr>
-          <td>   </td> 
-          <td> There are no patients to display. </td> 
-        </tr>');
-                                                } else {
-                                                    foreach ($patients as $patient) {
-                                                        echo ('<tr><td class="clickable" data-href="view_patient.php?pid=');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('">');
-                                                        echo ($patient['firstName']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('">');
-                                                        echo ($patient['lastName']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('">');
-                                                        echo ($patient['medicareNum']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('">');
-                                                        echo ($patient['dob']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('">');
-                                                        echo ($patient['email']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('">');
-                                                        echo ($patient['address']);
-                                                        echo ('</td></tr>');
-                                                    }
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                    <form action="../Model/patient_processor.php?action=create" method="post">
+                        <div class="form-group">
+                            <label for="MedicareNum" class="my-1 mr-2">Medicare Number </label>
+                            <input type="text" class="form-control" id="medicareNum" name="medicareNum">
                         </div>
+                        <div class="form-group">
+                            <label for="fName" class="my-1 mr-2">First Name </label>
+                            <input type="text" class="form-control" id="fName" name="fName">
+                        </div>
+                        <div class="form-group">
+                            <label for="lName" class="my-1 mr-2">Last Name </label>
+                            <input type="text" class="form-control" id="lName" name="lName">
+                        </div>
+                        <div class="form-group">
+                            <label for="dob" class="my-1 mr-2">Date of Birth</label>
+                            <input type="date" class="form-control" id="dob" name="dob">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="my-1 mr-2">E-mail </label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="telNum" class="my-1 mr-2">Telephone Number </label>
+                            <input type="text" class="form-control" id="telNum" name="telNum">
+                        </div>
+                        <div class="form-group">
+                            <label for="citizenship" class="my-1 mr-2">Citizenship </label>
+                            <input type="text" class="form-control" id="citizenship" name="citizenship">
+                        </div>
+                        <div class="form-group">
+                            <label for="province" class="my-1 mr-2">Province </label>
+                            <input type="text" class="form-control" id="province" name="province">
+                        </div>
+                        <div class="form-group">
+                            <label for="address" class="my-1 mr-2">Address </label>
+                            <input type="text" class="form-control" id="address" name="address">
+                        </div>
+                        <div class="form-group">
+                            <label for="postal" class="my-1 mr-2">Postal Code </label><br>
+                            <select class="selectpicker" id="postal" name="postal" data-live-search="true">
+                                <?php
 
-                    </div>
+                                foreach ($cities as $c) {
+                                    $x = get_postal_codes_by_city($c['name'], $link);
+                                ?>
+                                    <optgroup label="<?php echo $c['name']; ?>">
+                                        <?php
+                                        foreach ($x as $code) {
+                                        ?>
+                                            <option value="<?php echo $code['postalCode']; ?>"><?php echo $code['postalCode']; ?></option>
+                                        <?php
+                                        } ?>
+                                    </optgroup>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">Create Patient</button>
+
+                    </form>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -274,58 +267,25 @@ $patients = get_all_patients($link);
         </div>
     </div>
 
-    <!-- Delete Patient Modal-->
-    <div class="modal fade" id="deletePatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to continue?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p id="delete_txt"></p>
-                    <p id="tmp"></p>
-                    <button type="button" onclick="delete_patient()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Patient</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="../vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    <script src="../js/demo/chart-area-demo.js"></script>
+    <script src="../js/demo/chart-pie-demo.js"></script>
 
-    <!-- Data Tables -->
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#patientTable').DataTable();
-
-            //$('#patientTable').addClass("clickable");
-
-            $(".clickable").click(function(e) {
-                window.location = $(this).data("href");
-            });
-
-        });
-
-    </script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
 </body>
 
