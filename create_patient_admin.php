@@ -8,7 +8,8 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$regions = get_all_regions($link);
+$cities = get_all_cities($link);
+
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +31,9 @@ $regions = get_all_regions($link);
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
 </head>
 
@@ -193,8 +197,25 @@ $regions = get_all_regions($link);
                             <input type="text" class="form-control" id="address" name="address">
                         </div>
                         <div class="form-group">
-                            <label for="postal" class="my-1 mr-2">Postal Code </label>
-                            <input type="text" class="form-control" id="postal" name="postal">
+                            <label for="postal" class="my-1 mr-2">Postal Code </label><br>
+                            <select class="selectpicker" id="postal" name="postal" data-live-search="true">
+                                <?php
+
+                                foreach ($cities as $c) {
+                                    $x = get_postal_codes_by_city($c['name'], $link);
+                                ?>
+                                    <optgroup label="<?php echo $c['name']; ?>">
+                                        <?php
+                                        foreach ($x as $code) {
+                                        ?>
+                                            <option value="<?php echo $code['postalCode']; ?>"><?php echo $code['postalCode']; ?></option>
+                                        <?php
+                                        } ?>
+                                    </optgroup>
+                                <?php
+                                }
+                                ?>
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-outline-primary">Create Patient</button>
 
@@ -262,6 +283,9 @@ $regions = get_all_regions($link);
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
 </body>
 

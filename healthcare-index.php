@@ -251,6 +251,10 @@ $fullname = get_full_name($link, $_SESSION["User"]);
         function view_patients() {
             window.location.href="view_patients.php";
         }
+
+        function create_patient() {
+            window.location.href="create_patient.php";
+        }
     </script>
 
 </body>

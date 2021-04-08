@@ -174,13 +174,11 @@ $patient = mysqli_fetch_array($p);
                             <p class="card-text"><strong>Last Name:</strong> <?php echo ($patient['lastName']); ?></p>
                             <p class="card-text"><strong>Date of Birth:</strong> <?php echo ($patient['dob']); ?></p>
                             <p class="card-text"><strong>Email Address:</strong> <?php echo ($patient['email']); ?></p>
-                            <p class="card-text"><strong>City:</strong> <?php echo ($patient['city']); ?></p>
                             <p class="card-text"><strong>Telephone Number:</strong> <?php echo ($patient['telNum']); ?></p>
                             <p class="card-text"><strong>Citizenship:</strong> <?php echo ($patient['citizenship']); ?></p>
                             <p class="card-text"><strong>Province:</strong> <?php echo ($patient['province']); ?></p>
                             <p class="card-text"><strong>Address:</strong> <?php echo ($patient['address']); ?></p>
                             <p class="card-text"><strong>Postal Code:</strong> <?php echo ($patient['postalCode']); ?></p>
-                            <p class="card-text"><strong>Region:</strong> <?php echo get_region_name_by_id($link,$patient['region']); ?></p>
                         </div>
                     </div>
 
