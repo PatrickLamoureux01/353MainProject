@@ -155,13 +155,13 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
                     <style>
                         #map {
-                            height: 100%;
+                            height: 80%;
                         }
 
                         /* Optional: Makes the sample page fill the window. */
                         html,
                         body {
-                            height: 100%;
+                            height: 70%;
                             margin: 0;
                             padding: 0;
                         }
@@ -195,7 +195,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                                 });
 
                                 var infowindow = new google.maps.InfoWindow();
-                                map.data.addListener('click', function(event) {
+                                map.data.addListener('mouseover', function(event) {
                                     let province = event.feature.getProperty("ERNAME");
                                     let eruid = event.feature.getProperty("ERUID");
                                     infowindow.setContent(province + '<br> id: ' + eruid);
@@ -203,7 +203,6 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                                     infowindow.open(map);
 
                                 });
-
 
                             }
                         </script>
