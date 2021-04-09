@@ -15,7 +15,7 @@ $cities = get_all_cities($link);
 <html lang="en">
 
 <?php include('../nav/htmlheader.php'); ?>
-
+<title>Create Patient - <?php echo $fname; ?></title>
 <body id="page-top">
 
     <!-- Page Wrapper -->

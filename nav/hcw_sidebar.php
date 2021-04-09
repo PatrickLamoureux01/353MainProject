@@ -16,7 +16,7 @@
     <li class="nav-item active">
         <a class="nav-link" href="../healthcare-index.php">
             <i class="fas fa-columns"></i>
-            <span>Healthcare Worker Dashboard</span></a>
+            <span>Health Worker Dashboard</span></a>
     </li>
 
     <!-- Divider -->

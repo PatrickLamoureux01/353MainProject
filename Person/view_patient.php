@@ -21,6 +21,7 @@ $patient = mysqli_fetch_array($p);
 <html lang="en">
 
 <?php include('../nav/htmlheader.php'); ?>
+<title>View Patient - <?php echo $patient['firstName'] ." ". $patient['lastName']; ?></title>
 
 <body id="page-top">
 
