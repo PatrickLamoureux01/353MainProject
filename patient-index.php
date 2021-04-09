@@ -5,8 +5,8 @@ session_start();
 $db = new dbmysqli();
 $link = $db->connect();
 
-$fname = get_Fname($link,$_SESSION["User"]);
-$fullname = get_full_name($link,$_SESSION["User"]);
+$fname = get_Fname($link, $_SESSION["User"]);
+$fullname = get_full_name($link, $_SESSION["User"]);
 ?>
 
 <!DOCTYPE html>
@@ -20,13 +20,11 @@ $fullname = get_full_name($link,$_SESSION["User"]);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Patient Dashboard - <?php echo $fname;?></title>
+    <title>Patient Dashboard - <?php echo $fname; ?></title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
@@ -46,7 +44,7 @@ $fullname = get_full_name($link,$_SESSION["User"]);
                 <div class="sidebar-brand-icon">
                     <i class="fab fa-canadian-maple-leaf"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Welcome, <?php echo $fname;?></div>
+                <div class="sidebar-brand-text mx-3">Welcome, <?php echo $fname; ?></div>
             </a>
 
             <!-- Divider -->
@@ -77,13 +75,11 @@ $fullname = get_full_name($link,$_SESSION["User"]);
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Utilities</span>
                 </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Utilities:</h6>
                         <a class="collapse-item" href="utilities-color.html">Colors</a>
@@ -118,15 +114,12 @@ $fullname = get_full_name($link,$_SESSION["User"]);
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $fullname; ?></span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
@@ -157,8 +150,69 @@ $fullname = get_full_name($link,$_SESSION["User"]);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800"><?php echo $fname;?>'s Patient Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800"><?php echo $fname; ?>'s Patient Dashboard</h1>
                     </div>
+
+                    <style>
+                        #map {
+                            height: 80%;
+                        }
+
+                        /* Optional: Makes the sample page fill the window. */
+                        html,
+                        body {
+                            height: 70%;
+                            margin: 0;
+                            padding: 0;
+                        }
+                    </style>
+
+                    <div id="map">
+                        <script>
+                            var map;
+
+                            function initMap() {
+                                map = new google.maps.Map(document.getElementById('map'), {
+                                    zoom: 6,
+                                    center: {
+                                        lat: 48.34002758204062,
+                                        lng: -73.12571419279467
+                                    }
+                                });
+                                map.data.loadGeoJson('assets/actual.json');
+                                map.data.setStyle({
+                                    fillColor: 'blue',
+                                    strokeWeight: .5,
+                                    strokeColor: 'darkblue'
+                                });
+                                map.data.addListener('mouseover', function(event) {
+                                    map.data.overrideStyle(event.feature, {
+                                        fillColor: 'red'
+                                    });
+                                });
+                                map.data.addListener('mouseout', function(event) {
+                                    map.data.revertStyle();
+                                });
+
+                                var infowindow = new google.maps.InfoWindow();
+                                map.data.addListener('mouseover', function(event) {
+                                    let region = event.feature.getProperty("ERNAME");
+                                    let eruid = event.feature.getProperty("ERUID");
+                                    infowindow.setContent(region + ', QC<br> id: ' + eruid);
+                                    infowindow.setPosition(event.latLng);
+                                    infowindow.open(map);
+
+                                });
+
+                            }
+                        </script>
+                        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOtX-ry02FWTfMkZRRav9QLbn8Wco-PA&callback=initMap" type="text/javascript"></script>
+
+                    </div>
+
+
+
+
 
                 </div>
                 <!-- /.container-fluid -->
@@ -188,8 +242,7 @@ $fullname = get_full_name($link,$_SESSION["User"]);
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
