@@ -196,9 +196,9 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
                                 var infowindow = new google.maps.InfoWindow();
                                 map.data.addListener('mouseover', function(event) {
-                                    let province = event.feature.getProperty("ERNAME");
+                                    let region = event.feature.getProperty("ERNAME");
                                     let eruid = event.feature.getProperty("ERUID");
-                                    infowindow.setContent(province + '<br> id: ' + eruid);
+                                    infowindow.setContent(region + ', QC<br> id: ' + eruid);
                                     infowindow.setPosition(event.latLng);
                                     infowindow.open(map);
 
