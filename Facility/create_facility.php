@@ -1,5 +1,5 @@
 <?php
-include_once('header.php');
+include_once('../header.php');
 session_start();
 
 $db = new dbmysqli();
@@ -7,6 +7,9 @@ $link = $db->connect();
 
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
+
+$cities = get_all_cities($link);
+
 ?>
 
 <!DOCTYPE html>
@@ -20,14 +23,17 @@ $fullname = get_full_name($link, $_SESSION["User"]);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin Dashboard - <?php echo $fname; ?></title>
+    <title>Create Health Facility - <?php echo $fname; ?></title>
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
 </head>
 
@@ -40,7 +46,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin-index.php">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../admin-index.php">
                 <div class="sidebar-brand-icon">
                     <i class="fab fa-canadian-maple-leaf"></i>
                 </div>
@@ -52,7 +58,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="admin-index.php">
+                <a class="nav-link" href="../admin-index.php">
                     <i class="fas fa-columns"></i>
                     <span>Admin Dashboard</span></a>
             </li>
@@ -116,7 +122,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $fullname; ?></span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -150,72 +156,74 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800"><?php echo $fname; ?>'s Admin Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Create Health Facility</h1>
                     </div>
 
-                    
+                    <form action="../Model/worker_processor.php?action=create" method="post">
+                        <div class="form-group">
+                            <label for="MedicareNum" class="my-1 mr-2">Medicare Number </label>
+                            <input type="text" class="form-control" id="medicareNum" name="medicareNum" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fName" class="my-1 mr-2">First Name </label>
+                            <input type="text" class="form-control" id="fName" name="fName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lName" class="my-1 mr-2">Last Name </label>
+                            <input type="text" class="form-control" id="lName" name="lName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob" class="my-1 mr-2">Date of Birth</label>
+                            <input type="date" class="form-control" id="dob" name="dob" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="my-1 mr-2">E-mail </label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telNum" class="my-1 mr-2">Telephone Number </label>
+                            <input type="text" class="form-control" id="telNum" name="telNum" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="citizenship" class="my-1 mr-2">Citizenship </label>
+                            <input type="text" class="form-control" id="citizenship" name="citizenship" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="province" class="my-1 mr-2">Province </label>
+                            <input type="text" class="form-control" id="province" name="province" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address" class="my-1 mr-2">Address </label>
+                            <input type="text" class="form-control" id="address" name="address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="postal" class="my-1 mr-2">Postal Code </label><br>
+                            <select class="selectpicker" id="postal" name="postal" data-live-search="true">
+                                <?php
 
-                    <div class="row" style="text-align:center;">
-                        <!-- Content Row -->
-                        <div class="col-md-4">
-                            <i class="fas fa-users" style="font-size:52px;"></i>
-                            <p></p>
-                            <p><strong>PATIENTS</strong></p>
-                            <br>
-                            <br>
-                            <p>View, create, edit or delete from patients.</p>
-                            <button type="button" class="btn btn-outline-primary btn-block" onclick="view_patients()">Access Patients</button>
+                                foreach ($cities as $c) {
+                                    $x = get_postal_codes_by_city($link, $c['name']);
+                                ?>
+                                    <optgroup label="<?php echo $c['name']; ?>">
+                                        <?php
+                                        foreach ($x as $code) {
+                                        ?>
+                                            <option value="<?php echo $code['postalCode']; ?>"><?php echo $code['postalCode']; ?></option>
+                                        <?php
+                                        } ?>
+                                    </optgroup>
+                                <?php
+                                }
+                                ?>
+                            </select>
                         </div>
-                        <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
-                            <i class="fas fa-user-nurse" style="font-size:52px;"></i>
-                            <p></p>
-                            <p><strong>HEALTH WORKERS</strong></p>
-                            <br>
-                            <br>
-                            <p>View, create, edit or delete from health workers.</p>
-                            <button type="button" class="btn btn-outline-primary btn-block" onclick="view_healthworkers()">Access Health Workers</button>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="isAdmin" id="isAdmin">
+                            <label class="form-check-label" for="isAdmin">Grant Admin Privileges?</label>
                         </div>
-                        <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
-                            <i class="fas fa-hospital" style="font-size:52px;"></i>
-                            <p></p>
-                            <p><strong>FACILITIES</strong></p>
-                            <br>
-                            <br>
-                            <p>View, create, edit or delete from facilities.</p>
-                            <button type="button" class="btn btn-outline-primary btn-block" onclick="view_facilities()">Access Facilities</button>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row" style="text-align:center;">
-                        <!-- Content Row -->
-                        <div class="col-md-4">
-                            <i class="fas fa-globe" style="font-size:52px;"></i>
-                            <p></p>
-                            <p><strong>REGIONS</strong></p>
-                            <br>
-                            <br>
-                            <p>View, create, edit or delete from regions.</p>
-                            <button type="button" class="btn btn-outline-primary btn-block" onclick="view_regions()">Access Regions</button>
-                        </div>
-                        <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
-                            <i class="fas fa-border-none" style="font-size:52px;"></i>
-                            <p></p>
-                            <p><strong>GROUP ZONES</strong></p>
-                            <br>
-                            <br>
-                            <p>View, create, edit or delete from group zones.</p>
-                            <button type="button" class="btn btn-outline-primary btn-block" onclick="view_groupzones()">Access Group Zones</button>
-                        </div>
-                        <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
-                            <i class="far fa-comments" style="font-size:52px;"></i>
-                            <p></p>
-                            <p><strong>HEALTH RECOMMENDATIONS</strong></p>
-                            <br>
-                            <br>
-                            <p>View, create, edit or delete from health recommendations.</p>
-                            <button type="button" class="btn btn-outline-primary btn-block" onclick="view_recommendations()">Access Health Recommendations</button>
-                        </div>
-                    </div>
+                        <button type="submit" class="btn btn-outline-primary">Create Health Worker</button>
+
+                    </form>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -257,42 +265,31 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="admin-login.php">Logout</a>
+                    <a class="btn btn-primary" href="patient-login.php">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="../vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    <script src="../js/demo/chart-area-demo.js"></script>
+    <script src="../js/demo/chart-pie-demo.js"></script>
 
-    <script>
-        function view_patients() {
-            window.location.href = "Person/view_patients_admin.php";
-        }
-
-        function view_healthworkers() {
-            window.location.href = "HealthWorker/view_health_workers.php";
-        }
-
-        function view_facilities() {
-            window.location.href = "Facility/view_facilities.php";
-        }
-    </script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
 </body>
 
