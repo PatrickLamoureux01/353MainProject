@@ -8,34 +8,16 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$cities = get_all_cities($link);
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<?php include('../nav/htmlheader.php'); ?>
+<title>Create Health Facility - <?php echo $fname; ?></title>
 
-    <title>Create Health Facility - <?php echo $fname; ?></title>
 
-    <!-- Custom fonts for this template-->
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-
-</head>
 
 <body id="page-top">
 
@@ -159,69 +141,48 @@ $cities = get_all_cities($link);
                         <h1 class="h3 mb-0 text-gray-800">Create Health Facility</h1>
                     </div>
 
-                    <form action="../Model/worker_processor.php?action=create" method="post">
+                    <form action="../Model/facility_processor.php?action=create" method="post">
                         <div class="form-group">
-                            <label for="MedicareNum" class="my-1 mr-2">Medicare Number </label>
-                            <input type="text" class="form-control" id="medicareNum" name="medicareNum" required>
+                            <label for="facilityID" class="my-1 mr-2">Facility ID </label>
+                            <input type="text" class="form-control" id="facilityID" name="facilityID" required>
                         </div>
                         <div class="form-group">
-                            <label for="fName" class="my-1 mr-2">First Name </label>
-                            <input type="text" class="form-control" id="fName" name="fName" required>
+                            <label for="name" class="my-1 mr-2">Institution Name </label>
+                            <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="lName" class="my-1 mr-2">Last Name </label>
-                            <input type="text" class="form-control" id="lName" name="lName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="dob" class="my-1 mr-2">Date of Birth</label>
-                            <input type="date" class="form-control" id="dob" name="dob" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="my-1 mr-2">E-mail </label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="telNum" class="my-1 mr-2">Telephone Number </label>
+                            <label for="telNum" class="my-1 mr-2">Phone Number</label>
                             <input type="text" class="form-control" id="telNum" name="telNum" required>
                         </div>
                         <div class="form-group">
-                            <label for="citizenship" class="my-1 mr-2">Citizenship </label>
-                            <input type="text" class="form-control" id="citizenship" name="citizenship" required>
+                            <label for="type" class="my-1 mr-2">Type of Institution</label><br>
+                            <select class="selectpicker" id="type" name="type" required>
+                            <option value="Hospital">Hospital</option>
+                            <option value="Clinic">Clinic</option>
+                            <option value="Special Installation">Special Installation</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="province" class="my-1 mr-2">Province </label>
-                            <input type="text" class="form-control" id="province" name="province" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="address" class="my-1 mr-2">Address </label>
+                            <label for="address" class="my-1 mr-2">Address</label>
                             <input type="text" class="form-control" id="address" name="address" required>
                         </div>
                         <div class="form-group">
-                            <label for="postal" class="my-1 mr-2">Postal Code </label><br>
-                            <select class="selectpicker" id="postal" name="postal" data-live-search="true">
-                                <?php
-
-                                foreach ($cities as $c) {
-                                    $x = get_postal_codes_by_city($link, $c['name']);
-                                ?>
-                                    <optgroup label="<?php echo $c['name']; ?>">
-                                        <?php
-                                        foreach ($x as $code) {
-                                        ?>
-                                            <option value="<?php echo $code['postalCode']; ?>"><?php echo $code['postalCode']; ?></option>
-                                        <?php
-                                        } ?>
-                                    </optgroup>
-                                <?php
-                                }
-                                ?>
+                            <label for="website" class="my-1 mr-2">Website</label>
+                            <input type="text" class="form-control" id="website" name="website" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminType" class="my-1 mr-2">Administration Type </label><br>
+                            <select class="selectpicker" id="adminType" name="adminType" required>
+                            <option value="1">Appointment Only</option>
+                            <option value="2">Walk-In Only</option>
+                            <option value="3">Appointment & Walk-In</option>
                             </select>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="isAdmin" id="isAdmin">
-                            <label class="form-check-label" for="isAdmin">Grant Admin Privileges?</label>
+                            <input class="form-check-input" type="checkbox" name="drivethru" id="drivethru">
+                            <label class="form-check-label" for="drivethru">Drive-Thru Capable?</label>
                         </div>
-                        <button type="submit" class="btn btn-outline-primary">Create Health Worker</button>
+                        <button type="submit" class="btn btn-outline-primary">Create Health Institution</button>
 
                     </form>
 
@@ -252,44 +213,10 @@ $cities = get_all_cities($link);
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="patient-login.php">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+   <!-- Logout Modal-->
+   <?php include('../nav/logout.php'); ?>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="../js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="../vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="../js/demo/chart-area-demo.js"></script>
-    <script src="../js/demo/chart-pie-demo.js"></script>
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+   <?php include('../nav/footer.php'); ?>
 
 </body>
 

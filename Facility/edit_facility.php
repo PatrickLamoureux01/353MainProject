@@ -8,38 +8,22 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$regions = get_all_regions($link);
+$facilityID = $_GET["fid"];
 
-$personID = $_GET["pid"];
+$f = get_facility_by_id($facilityID, $link);
+$facility = mysqli_fetch_array($f);
 
-$p = get_patient_by_medicare($link, $personID);
-$patient = mysqli_fetch_array($p);
-
-$isAdmin = check_admin($personID, $link);
+$drivethru = doesDriveThru($facilityID, $link);
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<?php include('../nav/htmlheader.php'); ?>
+<title>Edit Health Facility - <?php echo $facility['name']; ?></title>
 
-    <title>Edit Health Facility - <?php echo $fname; ?></title>
-
-    <!-- Custom fonts for this template-->
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
-
-</head>
 
 <body id="page-top">
 
@@ -163,56 +147,118 @@ $isAdmin = check_admin($personID, $link);
                         <h1 class="h3 mb-0 text-gray-800">Edit Health Facility</h1>
                     </div>
 
-                    <form action="../Model/worker_processor.php?action=edit" method="post">
+                    <form action="../Model/facility_processor.php?action=edit" method="post">
                         <div class="form-group">
-                            <label for="MedicareNum" class="my-1 mr-2">Medicare Number </label>
-                            <input type="text" class="form-control" id="medicareNum" name="medicareNum" value="<?php echo $patient["medicareNum"]; ?>" readonly>
+                            <label for="facilityID" class="my-1 mr-2">Facility ID </label>
+                            <input type="text" class="form-control" id="facilityID" name="facilityID" value="<?php echo $facility['facilityId']; ?>" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="fName" class="my-1 mr-2">First Name </label>
-                            <input type="text" class="form-control" id="fName" name="fName" value="<?php echo $patient['firstName']; ?>">
+                            <label for="name" class="my-1 mr-2">Institution Name </label>
+                            <input type="text" class="form-control" id="name" name="name" value="<?php echo $facility['name']; ?>">
                         </div>
                         <div class="form-group">
-                            <label for="lName" class="my-1 mr-2">Last Name </label>
-                            <input type="text" class="form-control" id="lName" name="lName" value="<?php echo $patient['lastName']; ?>">
+                            <label for="telNum" class="my-1 mr-2">Phone Number</label>
+                            <input type="text" class="form-control" id="telNum" name="telNum" value="<?php echo $facility['phoneNum']; ?>">
                         </div>
                         <div class="form-group">
-                            <label for="dob" class="my-1 mr-2">Date of Birth</label>
-                            <input type="date" class="form-control" id="dob" name="dob" value="<?php echo $patient['dob']; ?>">
+                            <label for="type" class="my-1 mr-2">Type of Institution</label><br>
+                            <select class="selectpicker" id="type" name="type">
+                            <?php
+                            if ($facility['type'] == "Hospital") {
+                                ?>
+                                <option value="Hospital" selected>Hospital</option>
+                                <?php
+                            } else {
+                                ?>
+                                <option value="Hospital">Hospital</option>
+                                <?php
+                            }
+                            ?>
+                            <?php
+                            if ($facility['type'] == "Clinic") {
+                                ?>
+                                <option value="Clinic" selected>Clinic</option>
+                                <?php
+                            } else {
+                                ?>
+                                <option value="Clinic">Clinic</option>
+                                <?php
+                            }
+                            ?>
+                            <?php
+                            if ($facility['type'] == "Special Installation") {
+                                ?>
+                                <option value="Special Installation" selected>Special Installation</option>
+                                <?php
+                            } else {
+                                ?>
+                                <option value="Special Installation">Special Installation</option>
+                                <?php
+                            }
+                            ?>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="email" class="my-1 mr-2">E-mail </label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?php echo $patient['email']; ?>">
+                            <label for="address" class="my-1 mr-2">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" value="<?php echo $facility['address']; ?>">
                         </div>
                         <div class="form-group">
-                            <label for="telNum" class="my-1 mr-2">Telephone Number </label>
-                            <input type="text" class="form-control" id="telNum" name="telNum" value="<?php echo $patient['telNum']; ?>">
+                            <label for="website" class="my-1 mr-2">Website</label>
+                            <input type="text" class="form-control" id="website" name="website" value="<?php echo $facility['website']; ?>">
                         </div>
                         <div class="form-group">
-                            <label for="citizenship" class="my-1 mr-2">Citizenship </label>
-                            <input type="text" class="form-control" id="citizenship" name="citizenship" value="<?php echo $patient['citizenship']; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="province" class="my-1 mr-2">Province </label>
-                            <input type="text" class="form-control" id="province" name="province" value="<?php echo $patient['province']; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="address" class="my-1 mr-2">Address </label>
-                            <input type="text" class="form-control" id="address" name="address" value="<?php echo $patient['address']; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="postal" class="my-1 mr-2">Postal Code </label>
-                            <input type="text" class="form-control" id="postal" name="postal" value="<?php echo $patient['postalCode']; ?>">
+                            <label for="adminType" class="my-1 mr-2">Administration Type </label><br>
+                            <select class="selectpicker" id="adminType" name="adminType">
+                            <?php
+                            if ($facility['adminType'] == "1") {
+                                ?>
+                                <option value="1" selected>Appointment Only</option>
+                                <?php
+                            } else {
+                                ?>
+                                <option value="1">Appointment Only</option>
+                                <?php
+                            }
+                            ?>
+                            <?php
+                            if ($facility['adminType'] == "2") {
+                                ?>
+                                <option value="2" selected>Walk-In Only</option>
+                                <?php
+                            } else {
+                                ?>
+                                <option value="2">Walk-in Only</option>
+                                <?php
+                            }
+                            ?>
+                            <?php
+                            if ($facility['adminType'] == "3") {
+                                ?>
+                                <option value="3" selected>Appointment & Walk-In</option>
+                                <?php
+                            } else {
+                                ?>
+                                <option value="3">Appointment & Walk-In</option>
+                                <?php
+                            }
+                            ?>
+                            </select>
                         </div>
                         <div class="form-check">
-                            <?php if ($isAdmin == "0") {
-                                ?><input class="form-check-input" type="checkbox" name="isAdmin" id="isAdmin"> <?php
+                            <?php
+                            if ($drivethru == "0") {
+                            ?>
+                                <input class="form-check-input" type="checkbox" name="drivethru" id="drivethru">
+                            <?php
                             } else {
-                                ?><input class="form-check-input" type="checkbox" name="isAdmin" id="isAdmin" checked> <?php
-                            } ?>
-                            <label class="form-check-label" for="isAdmin">Grant Admin Privileges?</label>
+                            ?>
+                                <input class="form-check-input" type="checkbox" name="drivethru" id="drivethru" checked>
+                            <?php
+                            }
+                            ?>
+                            <label class="form-check-label" for="drivethru">Drive-Thru Capable?</label>
                         </div>
-                        <button type="submit" class="btn btn-outline-primary">Update Patient</button>
+                        <button type="submit" class="btn btn-outline-primary">Update Health Institution</button>
 
                     </form>
 
@@ -244,40 +290,9 @@ $isAdmin = check_admin($personID, $link);
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="patient-login.php">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php include('../nav/logout.php'); ?>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="../js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="../vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="../js/demo/chart-area-demo.js"></script>
-    <script src="../js/demo/chart-pie-demo.js"></script>
+    <?php include('../nav/footer.php'); ?>
 
 </body>
 

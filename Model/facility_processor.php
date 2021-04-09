@@ -8,25 +8,28 @@ $action = $_GET["action"]; // get action type
 
 if ($action == "create" || $action == "edit") {
 
-    $medicare = $_POST["medicareNum"];
-    $fname = $_POST["fName"];
-    $lname = $_POST["lName"];
-    $dob = $_POST["dob"];
-    $email = $_POST["email"];
-    $telNum = $_POST["telNum"];
-    $citizenship = $_POST["citizenship"];
-    $province = $_POST["province"];
+    $facilityID = $_POST["facilityID"];
+    $name = $_POST["name"];
+    $phone = $_POST["telNum"];
+    $type = $_POST["type"];
     $address = $_POST["address"];
-    $postal = $_POST["postal"];
+    $website = $_POST["website"];
+    $adminType = $_POST["adminType"];
+
+    if (isset($_POST["drivethru"])) {
+        $drivethru = 1;
+    } else {
+        $drivethru = 0;
+    }
 
     if ($action == "create") {
-        create_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link);
-        header('Location: ../Person/view_patients_admin.php');
+        create_health_center($facilityID, $name, $phone, $type, $address, $website, $drivethru, $adminType, $link);
+        header('Location: ../Facility/view_facilities.php');
     } else {
-        edit_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link);
-        header('Location: ../Person/view_patients_admin.php');
+        edit_health_center($facilityID, $name, $phone, $type, $address, $website, $drivethru, $adminType, $link);
+        header('Location: ../Facility/view_facilities.php');
     }
 } else if ($action == "delete") {
     $id = $_POST["id"];
-    delete_person($id, $link);
+    delete_health_center($id, $link);
 }

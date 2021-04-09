@@ -8,14 +8,14 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$regions = get_all_regions($link);
-
 $personID = $_GET["pid"];
 
 $p = get_patient_by_medicare($link, $personID);
 $patient = mysqli_fetch_array($p);
 
 $isAdmin = check_admin($personID, $link);
+
+$cities = get_all_cities($link);
 
 ?>
 
@@ -88,8 +88,29 @@ $isAdmin = check_admin($personID, $link);
                             <input type="text" class="form-control" id="address" name="address" value="<?php echo $patient['address']; ?>">
                         </div>
                         <div class="form-group">
-                            <label for="postal" class="my-1 mr-2">Postal Code </label>
-                            <input type="text" class="form-control" id="postal" name="postal" value="<?php echo $patient['postalCode']; ?>">
+                            <label for="postal" class="my-1 mr-2">Postal Code </label><br>
+                            <select class="selectpicker" id="postal" name="postal" data-live-search="true">
+                                <?php
+                                foreach ($cities as $c) {
+                                    $x = get_postal_codes_by_city($link, $c['name']);
+                                ?>
+                                    <optgroup label="<?php echo $c['name']; ?>">
+                                        <?php
+                                        foreach ($x as $code) {
+                                            if ($code['postalCode'] == $patient['postalCode']) {
+                                                ?>
+                                                <option value="<?php echo $code['postalCode']; ?>" selected><?php echo $code['postalCode']; ?></option>
+                                                <?php
+                                            } else { ?>
+                                                <option value="<?php echo $code['postalCode']; ?>"><?php echo $code['postalCode']; ?></option>
+                                            <?php
+                                            }
+                                        } ?>
+                                    </optgroup>
+                                <?php
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="form-check">
                             <?php if ($isAdmin == "0") {
