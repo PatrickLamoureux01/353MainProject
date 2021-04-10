@@ -6,6 +6,8 @@ include_once('Model/patients.php');
 include_once('Model/cities.php');
 include_once('Model/health_workers.php');
 include_once('Model/facilities.php');
+include_once('Model/groupzones.php');
+include_once('Model/publichealthrecommendation.php');
 ?>
 <html>
 <head>
