@@ -8,8 +8,6 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$regions = get_all_regions($link);
-
 $patientID = $_GET["pid"];
 
 $p = get_patient_by_medicare($link,$patientID);

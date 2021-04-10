@@ -2,12 +2,12 @@
 
 function get_all_regions($link) {
 
-    $sql = "SELECT name FROM region";
-    $select_stmt = mysqli_prepare($link,$sql);
+    $sql = "SELECT * FROM region";
+    $select_stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_execute($select_stmt);
     $regions = mysqli_stmt_get_result($select_stmt);
     mysqli_stmt_close($select_stmt);
-    
+
     return $regions;
 }
 

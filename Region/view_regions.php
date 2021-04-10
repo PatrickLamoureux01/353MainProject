@@ -8,14 +8,14 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$facilities = get_all_health_centers($link);
+$regions = get_all_regions($link);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <?php include('../nav/htmlheader.php'); ?>
-<title>View All Health Facilities</title>
+<title>View All Regions</title>
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -135,11 +135,12 @@ $facilities = get_all_health_centers($link);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Health Facilities Overview</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Regions Overview</h1>
                     </div>
 
                     <div class="col pr-4 pt-4 text-right">
-                        <a id="editbutton" class="m-0 pt-4 font-weight-bold text-primary" href="create_facility.php"><i class="fa fa-plus"></i> Create New Health Facility</a>
+                        <a id="editbutton" class="m-0 pt-4 font-weight-bold text-primary" href="create_region.php"><i class="fa fa-plus"></i> Create New Region</a>
+                        <a id="editbutton" class="m-0 pt-4 font-weight-bold text-primary" href="create_city.php"><i class="fa fa-plus"></i> Create New City</a>
                     </div>
 
                     <!-- Content Row -->
@@ -149,18 +150,15 @@ $facilities = get_all_health_centers($link);
                             <!-- DataTales Example -->
                             <div class="card shadow">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">All Health Facilities</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">All Regions</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-hover table-sm" id="facilitiesTable" width="100%" cellspacing="0">
+                                        <table class="table table-hover table-sm" id="regionsTable" width="100%" cellspacing="0" data-page-list="[10, 20, 25, 50, 100, 200, All]">
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
-                                                    <th>Phone Number</th>
-                                                    <th>Type</th>
-                                                    <th>Address</th>
-                                                    <th>Website</th>
+                                                    <th>Alert Level</th>
                                                     <th></th>
                                                     <th></th>
                                                 </tr>
@@ -169,40 +167,28 @@ $facilities = get_all_health_centers($link);
 
                                                 <?php
 
-                                                if (sizeof($facilities) == 0) {
+                                                if (sizeof($regions) == 0) {
                                                     echo ('<tr>
           <td>   </td> 
-          <td> There are no health centers to display. </td> 
+          <td> There are no regions to display. </td> 
         </tr>');
                                                 } else {
-                                                    foreach ($facilities as $facility) {
-                                                        echo ('<tr><td class="clickable" data-href="view_facility.php?fid=');
-                                                        echo $facility['facilityId'];
+                                                    foreach ($regions as $region) {
+                                                        echo ('<tr><td class="clickable" data-href="view_region.php?rid=');
+                                                        echo $region['regionID'];
                                                         echo ('">');
-                                                        echo ($facility['name']);
-                                                        echo ('</td><td class="clickable" data-href="view_facility.php?fid=');
-                                                        echo $facility['facilityId'];
+                                                        echo ($region['name']);
+                                                        echo ('</td><td class="clickable" data-href="view_region.php?rid=');
+                                                        echo $region['regionID'];
                                                         echo ('">');
-                                                        echo ($facility['phoneNum']);
-                                                        echo ('</td><td class="clickable" data-href="view_facility.php?fid=');
-                                                        echo $facility['facilityId'];
-                                                        echo ('">');
-                                                        echo ($facility['type']);
-                                                        echo ('</td><td class="clickable" data-href="view_facility.php?fid=');
-                                                        echo $facility['facilityId'];
-                                                        echo ('">');
-                                                        echo ($facility['address']);
-                                                        echo ('</td><td class="clickable" data-href="view_facility.php?fid=');
-                                                        echo $facility['facilityId'];
-                                                        echo ('">');
-                                                        echo ($facility['website']);
-                                                        echo ('</td><td class="clickable" data-href="edit_facility.php?fid=');
-                                                        echo $facility['facilityId'];
+                                                        echo ($region['alertLevel']);
+                                                        echo ('</td><td class="clickable" data-href="edit_region.php?rid=');
+                                                        echo $region['regionID'];
                                                         echo ('"><button type="button" class="btn btn-secondary">Edit</button>');
-                                                        echo ('</td><td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteFacilityModal" data-id="');
-                                                        echo $facility['facilityId'];
+                                                        echo ('</td><td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteRegionModal" data-id="');
+                                                        echo $region['regionID'];
                                                         echo ('" data-name="');
-                                                        echo ($facility['name']);
+                                                        echo ($region['name']);
                                                         echo ('">Delete</button>');
                                                         echo ('</td></tr>');
                                                     }
@@ -248,7 +234,7 @@ $facilities = get_all_health_centers($link);
    <?php include('../nav/logout.php'); ?>
 
     <!-- Delete Patient Modal-->
-    <div class="modal fade" id="deleteFacilityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteRegionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -260,7 +246,7 @@ $facilities = get_all_health_centers($link);
                 <div class="modal-body">
                     <p id="delete_txt"></p>
                     <p id="tmp"></p>
-                    <button type="button" onclick="delete_facility()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Facility</button>
+                    <button type="button" onclick="delete_facility()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Region</button>
                 </div>
             </div>
         </div>
@@ -270,7 +256,9 @@ $facilities = get_all_health_centers($link);
 
     <script>
         $(document).ready(function() {
-            $('#facilitiesTable').DataTable();
+            $('#regionsTable').DataTable({
+                pageLength: 20
+            });
 
             $(".clickable").click(function(e) {
                 window.location = $(this).data("href");
@@ -278,14 +266,14 @@ $facilities = get_all_health_centers($link);
 
         });
 
-        $('#deleteFacilityModal').on('shown.bs.modal', function(event) {
+        $('#deleteRegionModal').on('shown.bs.modal', function(event) {
 
 
             var button = $(event.relatedTarget) // Button that triggered the modal
             var name = button.data('name') // Extract patient name
             var id = button.data('id') // Extract patient ID
 
-            $('#delete_txt').html("You are about to delete <strong>" + name + "</strong> from the health facilities records.");
+            $('#delete_txt').html("You are about to delete <strong>" + name + "</strong> from the region records.");
             $('#tmp').val(id);
         });
 
@@ -295,7 +283,7 @@ $facilities = get_all_health_centers($link);
 
             $.ajax({
                 type: "POST",
-                url: "../Model/facility_processor.php?action=delete",
+                url: "../Model/region_city_processor.php?action=delete",
                 data: {
                     action: "delete",
                     id: id

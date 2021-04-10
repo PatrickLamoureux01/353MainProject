@@ -15,6 +15,8 @@ $patient_name = get_full_name($link,$patientID);
 $p = get_patient_by_medicare($link, $patientID);
 $patient = mysqli_fetch_array($p);
 
+$isAdmin = check_admin($_SESSION["User"],$link);
+
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +31,14 @@ $patient = mysqli_fetch_array($p);
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php include('../nav/hcw_sidebar.php'); ?>
+
+        <?php
+        if ($isAdmin == 0) {
+            include('../nav/hcw_sidebar.php'); 
+        } else {
+            include('../nav/admin_sidebar.php'); 
+        }
+        ?>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">

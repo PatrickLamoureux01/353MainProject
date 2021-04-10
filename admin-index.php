@@ -270,6 +270,10 @@ $fullname = get_full_name($link, $_SESSION["User"]);
         function view_facilities() {
             window.location.href = "Facility/view_facilities.php";
         }
+
+        function view_regions() {
+            window.location.href= "Region/view_regions.php";
+        }
     </script>
 
 </body>
