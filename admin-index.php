@@ -273,10 +273,11 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
         function view_regions() {
             window.location.href= "Region/view_regions.php";
-        function view_groupzones(){
+        }
+        function view_groupzones() {
             window.location.href = "GroupZone/view_groupzones.php";
         }
-        function view_recommendations(){
+        function view_recommendations() {
             window.location.href = "PublicHealthRecommendation/view_publichealthrecommendations.php";
         }
     </script>

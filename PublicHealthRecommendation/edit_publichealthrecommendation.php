@@ -10,7 +10,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
 $recommendationID = $_GET["fid"];
 
-$f = get_public_health_rec_by_id($recommendationID,$link);
+$f = get_public_health_rec_by_id($recommendationID, $link);
 $publicHealthrec = mysqli_fetch_array($f);
 
 
@@ -160,75 +160,64 @@ $publicHealthrec = mysqli_fetch_array($f);
                             <select class="selectpicker" id="alertLevel" name="alertLevel">
                                 <?php
                                 if ($publicHealthrec['alertLevel'] == 1) {
-                                    ?>
+                                ?>
                                     <option value=1 selected>1</option>
-                                    <?php
+                                <?php
                                 } else {
-                                    ?>
+                                ?>
                                     <option value=1>1</option>
-                                    <?php
+                                <?php
                                 }
                                 ?>
                                 <?php
                                 if ($publicHealthrec['alertLevel'] == 2) {
-                                    ?>
+                                ?>
                                     <option value=2 selected>2</option>
-                                    <?php
+                                <?php
                                 } else {
-                                    ?>
+                                ?>
                                     <option value=2>2</option>
-                                    <?php
+                                <?php
                                 }
                                 ?>
                                 <?php
                                 if ($publicHealthrec['alertLevel'] == 3) {
-                                    ?>
+                                ?>
                                     <option value=3 selected>3</option>
-                                    <?php
+                                <?php
                                 } else {
-                                    ?>
+                                ?>
                                     <option value=3>3</option>
-                                    <?php
+                                <?php
                                 }
                                 ?>
                                 <?php
                                 if ($publicHealthrec['alertLevel'] == 4) {
-                                    ?>
+                                ?>
                                     <option value=4 selected>4</option>
-                                    <?php
+                                <?php
                                 } else {
-                                    ?>
+                                ?>
                                     <option value=4>4</option>
-                                    <?php
+                                <?php
                                 }
                                 ?>
                             </select>
                         </div>
-                    </div>
-
                         <button type="submit" class="btn btn-outline-primary">Update Public Health Recommendation</button>
-
                     </form>
-
                 </div>
                 <!-- /.container-fluid -->
 
             </div>
             <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
-                </div>
-            </footer>
+            <!-- Copyright -->
+            <?php include('../nav/copyright.php'); ?>
             <!-- End of Footer -->
 
         </div>
-        <!-- End of Content Wrapper -->
-
+        <!-- End of Content Wrapper -->                      
     </div>
     <!-- End of Page Wrapper -->
 

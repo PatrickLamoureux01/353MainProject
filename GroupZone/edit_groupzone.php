@@ -10,7 +10,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
 $groupzoneID = $_GET["fid"];
 
-$f = get_group_zone_by_id($groupzoneID,$link);
+$f = get_group_zone_by_id($groupzoneID, $link);
 $groupzone = mysqli_fetch_array($f);
 
 
@@ -155,31 +155,22 @@ $groupzone = mysqli_fetch_array($f);
                             <label for="name" class="my-1 mr-2">Institution Name </label>
                             <input type="text" class="form-control" id="name" name="name" value="<?php echo $groupzone['name']; ?>">
                         </div>
-
-                        </div>
-
                         <button type="submit" class="btn btn-outline-primary">Update Group Zone</button>
-
                     </form>
-
                 </div>
-                <!-- /.container-fluid -->
 
             </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
+            <!-- /.container-fluid -->
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Main Content -->
+
+        <!-- Copyright -->
+        <?php include('../nav/copyright.php'); ?>
+            <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
 
     </div>
     <!-- End of Page Wrapper -->
