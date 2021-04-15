@@ -191,11 +191,11 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                         <div class="col-md-4">
                             <i class="fas fa-globe" style="font-size:52px;"></i>
                             <p></p>
-                            <p><strong>REGIONS</strong></p>
+                            <p><strong>REGIONS / CITIES</strong></p>
                             <br>
                             <br>
-                            <p>View, create, edit or delete from regions.</p>
-                            <button type="button" class="btn btn-outline-primary btn-block" onclick="view_regions()">Access Regions</button>
+                            <p>View, create, edit or delete from regions/cities.</p>
+                            <button type="button" class="btn btn-outline-primary btn-block" onclick="view_regions()">Access Regions/Cities</button>
                         </div>
                         <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
                             <i class="fas fa-border-none" style="font-size:52px;"></i>
@@ -272,7 +272,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
         }
 
         function view_regions() {
-            window.location.href= "Region/view_regions.php";
+            window.location.href= "Region/view_regions_cities.php";
         }
         function view_groupzones() {
             window.location.href = "GroupZone/view_groupzones.php";

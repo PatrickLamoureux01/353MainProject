@@ -8,18 +8,22 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$cities = get_all_cities($link);
+$cityID = $_GET["cid"];
+
+$c = get_city_by_id($cityID,$link);
+$city = mysqli_fetch_array($c);
+
+$codes = get_postal_codes_by_city_id($cityID,$link);
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-
 <?php include('../nav/htmlheader.php'); ?>
-<title>Create Region - <?php echo $fname; ?></title>
+<title>View City - <?php echo $city['name']; ?></title>
 
-
+    
 
 <body id="page-top">
 
@@ -140,36 +144,32 @@ $cities = get_all_cities($link);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Create Region</h1>
+                        <h1 class="h3 mb-0 text-gray-800"><?php echo $city['name'] ?>'s Full Profile</h1>
                     </div>
 
-                    <form action="../Model/region_city_processor.php?action=create_region" method="post">
-                        <div class="form-group">
-                            <label for="regionID" class="my-1 mr-2">Region ID </label>
-                            <input type="text" class="form-control" id="regionID" name="regionID" required>
+                    <div class="card flex-row flex-wrap">
+                        <div class="card-header border-0">
+                            <img src="//placehold.it/200" alt="">
                         </div>
-                        <div class="form-group">
-                            <label for="name" class="my-1 mr-2">Region Name </label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="alertLevel" class="my-1 mr-2">Alert Level</label>
-                            <input type="number" class="form-control" id="alertLevel" name="alertLevel" min="1" max="4" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="cities" class="my-1 mr-2">Cities in this region </label><br>
-                            <select class="selectpicker" id="cities" name="cities[]" data-live-search="true" multiple data-selected-text-format="count > 3" data-actions-box="true">
-                                <?php
-                                foreach ($cities as $city) {
+                        <div class="card-block px-2">
+
+
+                            <h4 class="card-title" style="text-decoration:underline;">City Information</h4>
+                            <p class="card-text"><strong>City ID:</strong> <?php echo ($city['cityID']); ?></p>
+                            <p class="card-text"><strong>City Name:</strong> <?php echo ($city['name']); ?></p>
+                            <p class="card-text"><strong>Postal codes in this city:</strong><ul>
+                            <?php
+                            foreach($codes as $code) {
                                 ?>
-                                <option value="<?php echo $city['cityID']; ?>"><?php echo $city['name']; ?></option>
+                                    <li><?php echo $code['code']; ?></li>
                                 <?php
-                                }
-                                ?>
-                            </select>
+                            }
+                            ?></p>
+                            </ul>
+                            
                         </div>
-                        <button type="submit" class="btn btn-outline-primary">Create Region</button>
-                    </form>
+                    </div>
+
 
                 </div>
                 <!-- /.container-fluid -->

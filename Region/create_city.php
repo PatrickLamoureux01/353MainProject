@@ -8,6 +8,8 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
+$codes = get_all_postal_codes($link);
+
 ?>
 
 <!DOCTYPE html>
@@ -141,48 +143,28 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                         <h1 class="h3 mb-0 text-gray-800">Create City</h1>
                     </div>
 
-                    <form action="../Model/region_city_processor.php?action=create" method="post">
+                    <form action="../Model/region_city_processor.php?action=create_city" method="post">
                         <div class="form-group">
-                            <label for="facilityID" class="my-1 mr-2">Facility ID </label>
-                            <input type="text" class="form-control" id="facilityID" name="facilityID" required>
+                            <label for="cityID" class="my-1 mr-2">City ID </label>
+                            <input type="text" class="form-control" id="cityID" name="cityID" required>
                         </div>
                         <div class="form-group">
-                            <label for="name" class="my-1 mr-2">Institution Name </label>
+                            <label for="name" class="my-1 mr-2">City Name </label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="telNum" class="my-1 mr-2">Phone Number</label>
-                            <input type="text" class="form-control" id="telNum" name="telNum" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="type" class="my-1 mr-2">Type of Institution</label><br>
-                            <select class="selectpicker" id="type" name="type" required>
-                            <option value="Hospital">Hospital</option>
-                            <option value="Clinic">Clinic</option>
-                            <option value="Special Installation">Special Installation</option>
+                            <label for="postals" class="my-1 mr-2">Postal codes in this city </label><br>
+                            <select class="selectpicker" id="postals" name="postals[]" data-live-search="true" multiple data-selected-text-format="count > 3" data-actions-box="true">
+                                <?php
+                                foreach ($codes as $code) {
+                                ?>
+                                <option value="<?php echo $code['code']; ?>"><?php echo $code['code']; ?></option>
+                                <?php
+                                }
+                                ?>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="address" class="my-1 mr-2">Address</label>
-                            <input type="text" class="form-control" id="address" name="address" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="website" class="my-1 mr-2">Website</label>
-                            <input type="text" class="form-control" id="website" name="website" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="adminType" class="my-1 mr-2">Administration Type </label><br>
-                            <select class="selectpicker" id="adminType" name="adminType" required>
-                            <option value="1">Appointment Only</option>
-                            <option value="2">Walk-In Only</option>
-                            <option value="3">Appointment & Walk-In</option>
-                            </select>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="drivethru" id="drivethru">
-                            <label class="form-check-label" for="drivethru">Drive-Thru Capable?</label>
-                        </div>
-                        <button type="submit" class="btn btn-outline-primary">Create Health Institution</button>
+                        <button type="submit" class="btn btn-outline-primary">Create City</button>
 
                     </form>
 
