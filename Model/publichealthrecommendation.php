@@ -54,5 +54,18 @@ function get_public_health_rec_by_id($id,$link) {
 
 }
 
+function get_all_measures_for_alert($level,$link) {
+
+    $sql = "SELECT recommendation FROM publicHealthRecommendation WHERE alertLevel <= ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $level);
+    mysqli_stmt_execute($select_stmt);
+    $measures = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $measures;
+
+}
+
 
 

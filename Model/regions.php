@@ -90,4 +90,31 @@ function get_region_by_id($id,$link) {
     return $region;
 
 }
+
+function get_current_alert_level($id,$link) {
+
+    $sql = "SELECT alertLevel FROM region WHERE regionID = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $id);
+    mysqli_stmt_execute($select_stmt);
+    mysqli_stmt_bind_result($select_stmt, $alert);
+    mysqli_stmt_fetch($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $alert;
+
+}
+
+function get_all_people_in_region($id,$link) {
+
+    $sql = "SELECT * FROM person WHERE person.postalCode = cityPostal.postalCode AND cityPostal.cityID = regionCity.cityID AND regionCity.regionID = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $id);
+    mysqli_stmt_execute($select_stmt);
+    $people = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $people;
+
+}
 ?>

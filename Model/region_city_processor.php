@@ -5,7 +5,7 @@ $db = new dbmysqli();
 $link = $db->connect();
 
 $action = $_GET["action"]; // get action type
-var_dump($action);
+
 
 if ($action == "create_region") {
 
@@ -25,6 +25,21 @@ if ($action == "create_region") {
     $name = $_POST["name"];
     $alert = $_POST["alertLevel"];
     $cities = $_POST["cities"];
+
+    $current_level = get_current_alert_level($regionId,$link);
+    if ($current_level != $alert) { // alert level has changed
+        $people = get_all_people_in_region($regionId,$link); // get all people in given region
+        $measures = get_all_measures_for_alert($alert,$link);
+        if ($current_level > $alert) { // alert level went up
+            foreach ($people as $person) { 
+                $fullname = $person['firstName'] . $person['lastName'];
+                insert_msg_alert_level_increase(date("Y-m-d H:i:s"),$regionId,$fullname,$person['email'],$current_level,$alert,$measures,"The alert level for your region has increased. Please follow the following guidelines in regards to public health.",$link);
+            }
+            
+        } else { // alert level went down
+            //insert_msg_alert_level_decrease(date("Y-m-d H:i:s"));
+        }
+    }
 
     edit_region($regionId,$name,$alert,$link);
     delete_cities_from_region($regionId,$link); // delete all previous records of links
