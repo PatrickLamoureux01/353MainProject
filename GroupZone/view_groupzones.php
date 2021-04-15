@@ -165,7 +165,7 @@ $groupzones = get_all_group_zones($link);
 
                                                 <?php
 
-                                                if (sizeof($groupzones) == 0) {
+                                                if (mysqli_num_rows($groupzones) == 0) {
                                                     echo ('<tr>
           <td>   </td> 
           <td> There are no group zones to display. </td> 

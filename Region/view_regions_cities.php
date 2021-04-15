@@ -169,7 +169,7 @@ $cities = get_all_cities($link);
 
                                                 <?php
 
-                                                if (sizeof($regions) == 0) {
+                                                if (mysqli_num_rows($regions) == 0) {
                                                     echo ('<tr>
           <td>   </td> 
           <td> There are no regions to display. </td> 
@@ -220,7 +220,7 @@ $cities = get_all_cities($link);
 
                                                 <?php
 
-                                                if (sizeof($cities) == 0) {
+                                                if (mysqli_num_rows($cities) == 0) {
                                                     echo ('<tr>
           <td>   </td> 
           <td> There are no cities to display. </td> 

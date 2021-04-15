@@ -2,9 +2,9 @@
 
 function insert_msg_covid_test_positive($datetime,$region,$person,$email,$description,$link) {
 
-    $sql = "INSERT INTO messages(broadcastDateTime,region,person,emailAddress,oldAlertState,newAlertState,newGuidelines,description) VALUES(?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO messages(broadcastDateTime,region,person,emailAddress,oldAlertState,newAlertState,newGuidelines,description) VALUES(?,?,?,?,null,null,null,?)";
     $insert_stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($insert_stmt, 'ssssssss',$datetime,$region,$person,$email,null,null,null,$description);
+    mysqli_stmt_bind_param($insert_stmt, 'ssssssss',$datetime,$region,$person,$email,$description);
     mysqli_stmt_execute($insert_stmt);
     mysqli_stmt_close($insert_stmt);
 
@@ -12,9 +12,9 @@ function insert_msg_covid_test_positive($datetime,$region,$person,$email,$descri
 
 function insert_msg_covid_test_negative($datetime,$region,$person,$email,$description,$link) {
 
-    $sql = "INSERT INTO messages(broadcastDateTime,region,person,emailAddress,oldAlertState,newAlertState,newGuidelines,description) VALUES(?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO messages(broadcastDateTime,region,person,emailAddress,oldAlertState,newAlertState,newGuidelines,description) VALUES(?,?,?,?,null,null,null,?)";
     $insert_stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($insert_stmt, 'ssssssss',$datetime,$region,$person,$email,null,null,null,$description);
+    mysqli_stmt_bind_param($insert_stmt, 'ssssssss',$datetime,$region,$person,$email,$description);
     mysqli_stmt_execute($insert_stmt);
     mysqli_stmt_close($insert_stmt);
     

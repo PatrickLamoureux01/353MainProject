@@ -74,7 +74,7 @@ $workers = get_all_health_workers($link);
 
                                                 <?php
 
-                                                if (sizeof($workers) == 0) {
+                                                if (mysqli_num_rows($workers) == 0) {
                                                     echo ('<tr>
           <td>   </td> 
           <td> There are no health workers to display. </td> 

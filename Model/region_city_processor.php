@@ -27,20 +27,27 @@ if ($action == "create_region") {
     $cities = $_POST["cities"];
 
     $current_level = get_current_alert_level($regionId,$link);
+    $region_name = get_region_name_by_id($link,$regionId);
+
     if ($current_level != $alert) { // alert level has changed
         $people = get_all_people_in_region($regionId,$link); // get all people in given region
         $measures = get_all_measures_for_alert($alert,$link);
-        if ($current_level > $alert) { // alert level went up
+        $list = "";
+        foreach($measures as $m) {
+         $list .= $m['recommendation'] . " ";
+        }
+        if ($alert > $current_level) { // alert level went up
             foreach ($people as $person) { 
-                $fullname = $person['firstName'] . $person['lastName'];
-                insert_msg_alert_level_increase(date("Y-m-d H:i:s"),$regionId,$fullname,$person['email'],$current_level,$alert,$measures,"The alert level for your region has increased. Please follow the following guidelines in regards to public health.",$link);
+                $fullname = $person['firstName']." ".$person['lastName'];
+                insert_msg_alert_level_increase(date("Y-m-d H:i:s"),$region_name,$fullname,$person['email'],$current_level,$alert,$list,"The alert level for your region has increased. Please follow the guidelines corresponding to the alert level of your region.",$link);
             }
-            
         } else { // alert level went down
-            //insert_msg_alert_level_decrease(date("Y-m-d H:i:s"));
+            foreach ($people as $person) { 
+                $fullname = $person['firstName']." ".$person['lastName'];
+                insert_msg_alert_level_decrease(date("Y-m-d H:i:s"),$region_name,$fullname,$person['email'],$current_level,$alert,$list,"The alert level for your region has decreased. Please follow the guidelines corresponding to the alert level of your region.",$link);
+            }
         }
     }
-
     edit_region($regionId,$name,$alert,$link);
     delete_cities_from_region($regionId,$link); // delete all previous records of links
     foreach($cities as $city) {

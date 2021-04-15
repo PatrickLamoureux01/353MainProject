@@ -166,7 +166,7 @@ $healthrec = get_all_public_health_rec($link);
 
                                                 <?php
 
-                                                if (sizeof($healthrec) == 0) {
+                                                if (mysqli_num_rows($healthrec) == 0) {
                                                     echo ('<tr>
           <td>   </td> 
           <td> There are no recommendations to display. </td> 

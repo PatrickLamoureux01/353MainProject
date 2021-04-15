@@ -107,7 +107,7 @@ function get_current_alert_level($id,$link) {
 
 function get_all_people_in_region($id,$link) {
 
-    $sql = "SELECT * FROM person WHERE person.postalCode = cityPostal.postalCode AND cityPostal.cityID = regionCity.cityID AND regionCity.regionID = ?";
+    $sql = "SELECT * FROM person,cityPostal,regionCity WHERE person.postalCode = cityPostal.postalCode AND cityPostal.cityID = regionCity.cityID AND regionCity.regionID = ?";
     $select_stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($select_stmt, 'i', $id);
     mysqli_stmt_execute($select_stmt);

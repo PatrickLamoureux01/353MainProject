@@ -9,6 +9,7 @@ include_once('Model/facilities.php');
 include_once('Model/groupzones.php');
 include_once('Model/publichealthrecommendation.php');
 include_once('Model/messages.php');
+date_default_timezone_set('US/Eastern');
 ?>
 <html>
 <head>
