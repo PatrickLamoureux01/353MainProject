@@ -22,7 +22,7 @@ if ($action == "create" || $action == "edit") {
     if ($action == "create") {
         create_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link);
         header('Location: ../Person/view_patients_admin.php');
-    } else {
+    } else if ($action == "edit") {
         edit_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link);
         header('Location: ../Person/view_patients_admin.php');
     }
