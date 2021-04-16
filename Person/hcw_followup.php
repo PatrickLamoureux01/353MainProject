@@ -8,7 +8,9 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$med = $_SESSION["User"];
+$med;
+$show = 0;
+
 
 $symptoms = get_all_symptoms($link)
 ?>
@@ -23,7 +25,7 @@ $symptoms = get_all_symptoms($link)
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <?php include('../nav/patient_sidebar.php'); ?>
+        <?php include('../nav/hcw_sidebar.php'); ?>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -44,8 +46,28 @@ $symptoms = get_all_symptoms($link)
 
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-                    
-                    <form action="../Model/med_processor.php?u=p" method="post">
+                    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                        <div class="row">
+                            <div class="col"><input type="text" id="medicareNum" name="medicareNum" class="form-control" placeholder="Medicare Number"></div>
+                            <div class="col"><button type="submit" class="btn btn-primary">Find Tests</button></div>
+                        </div>
+                    </form>
+
+                    <?php
+                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                        $med = $_POST['medicareNum'];
+                        $show = 0;
+                        if (does_person_already_exist($med, $link) == 1) {
+                            $show = 1;
+                        } else {
+                            $show = 0;
+                            echo "<p>There is nobody here by that name</p>";
+                        }
+                    }
+                    ?>
+
+                    <p>Bibendum at varius vel pharetra vel. Suspendisse faucibus interdum posuere lorem ipsum dolor sit amet consectetur. Mauris rhoncus aenean vel elit. Dignissim convallis aenean et tortor. Auctor urna nunc id cursus metus aliquam. </p>
+                    <form <?php if ($show == 0) echo "style='display: none';"; ?> action="../Model/med_processor.php?u=hc" method="post">
                         <div class="form-row">
 
                             <div class="form-group col-md-6">
