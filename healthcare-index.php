@@ -283,7 +283,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
         }
 
         function result() {
-            window.location.href="HealthWorker/give_result.php";
+            window.location.href="HealthWorker/give_results.php";
         }
     </script>
 

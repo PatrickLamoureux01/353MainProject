@@ -6,15 +6,23 @@ $link = $db->connect();
 
 $action = $_GET["action"]; // get action type
 
-$patient = $_POST["patient"];
-$health_center = $_POST["institution"];
-$adminBy = $_POST["adminBy"];
-$testDate = $_POST["testDate"];
-
 if ($action == "perform_test") {
+
+    $patient = $_POST["patient"];
+    $health_center = $_POST["institution"];
+    $adminBy = $_POST["adminBy"];
+    $testDate = $_POST["testDate"];
+
     create_test($testDate, $patient, $adminBy, $health_center, $link);
     header('Location: ../healthcare-index.php');
-} else if ($action == "edit") {
-    edit_person($medicare, $fname, $lname, $dob, $email, $telNum, $citizenship, $province, $address, $postal, $link);
-    header('Location: ../Person/view_patients_admin.php');
+} else if ($action == "give_results") {
+
+    $patient = $_POST["patient"];
+    $result = $_POST["result"];
+    $resultDate = $_POST["resultDate"];
+
+    $patientInfo = explode("/",$patient);
+
+    log_test_result($patientInfo[0],$patientInfo[1],$result,$resultDate, $link);
+    header('Location: ../healthcare-index.php');
 }

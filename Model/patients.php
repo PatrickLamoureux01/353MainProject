@@ -124,4 +124,25 @@ function create_test($testDate,$patient,$adminBy,$facility,$link)
     mysqli_stmt_close($insert_stmt);
 }
 
+function log_test_result($patient,$testDate,$result,$resultDate,$link) {
+
+    $sql = "UPDATE diagnostic SET resultDate = ?, testResult = ? WHERE patient = ? AND testDate = ?";
+    $update_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($update_stmt, 'siis', $resultDate,$result,$patient,$testDate);
+    mysqli_stmt_execute($update_stmt);
+    mysqli_stmt_close($update_stmt);
+
+}
+
+function get_all_patients_awaiting_results($link) {
+
+    $sql = "SELECT patient,testDate FROM diagnostic WHERE testResult IS NULL";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_execute($select_stmt);
+    $patients = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $patients;
+
+}
 ?>
