@@ -164,7 +164,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                             <br>
                             <br>
                             <p>Manage patient records</p>
-                            <button type="button" class="btn btn-outline-primary btn-block" ><a href="Person/hcw_followup.php">Access Patients</a></button>
+                            <button type="button" class="btn btn-outline-primary btn-block" onclick="view_patients()">Access Patients</button>
                         </div>
                         <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
                             <i class="fas fa-user-nurse" style="font-size:52px;"></i>
