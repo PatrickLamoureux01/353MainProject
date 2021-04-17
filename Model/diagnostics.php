@@ -1,7 +1,7 @@
 <?php
 //Get a list of test dates for a given medicate number
 function get_tests($link, $med){
-    $sql = "SELECT testDate from diagnostic where patient = ? and (followedUp is null or followedUp = 0)";
+    $sql = "SELECT testDate from diagnostic where patient = ? and (followedUp is null)";
     $select_stmt = mysqli_prepare($link,$sql);
     mysqli_stmt_bind_param($select_stmt, 'i', $med);
     mysqli_stmt_execute($select_stmt);
@@ -9,7 +9,17 @@ function get_tests($link, $med){
     mysqli_stmt_close($select_stmt);
 
     return $tests;
+}
 
+function get_pos_tests($link, $med){
+    $sql = "SELECT testDate from diagnostic where patient = ? and testResult = 1";
+    $select_stmt = mysqli_prepare($link,$sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $med);
+    mysqli_stmt_execute($select_stmt);
+    $tests = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $tests;
 }
 
 //Get a list of all symptoms
@@ -24,11 +34,10 @@ function get_all_symptoms($link){
 }
 
 //Update the diagnostic to add temperature and bool
-function u_diag($med, $testDate, $temp, $link){
-    $fu = 1;
+function u_diag($med, $testDate, $today, $temp, $link){
     $sql = "UPDATE diagnostic SET followupTemperature = ?, followedUp = ? WHERE patient = ? AND testDate = ?";
     $update_stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($update_stmt,'iiis', $temp, $fu, $med, $testDate);
+    mysqli_stmt_bind_param($update_stmt,'isis', $temp, $today, $med, $testDate);
     mysqli_stmt_execute($update_stmt);
     mysqli_stmt_close($update_stmt);
 }
@@ -74,3 +83,33 @@ function person_set_symptom($med, $symptom, $recorded, $link){
     mysqli_stmt_execute($i);
     mysqli_stmt_close($i);
 }
+
+function get_test_symptoms($med, $testDate, $link){
+    $sql = "SELECT ps.medicareNum,
+        p.firstName,
+        p.lastName, 
+        date(ps.lastRecorded) as lastRecorded, 
+        s.name as symptom,
+        d.testDate
+    FROM personSymptom ps, person p, symptoms s, diagnostic d 
+    where ps.medicareNum = p.medicareNum 
+        and d.followedUp = ps.lastRecorded 
+        and s.symptomID = ps.symptomID
+        and ps.medicareNum = ?
+        and testDate = ?";
+
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'is', $med, $testDate);
+    mysqli_stmt_execute($select_stmt);
+    $symptoms = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $symptoms;
+
+
+
+}
+
+
+
+//Select a person --> get the dates they were tested

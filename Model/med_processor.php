@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $temp = $_POST["temperature"];
 
     //Update the diagnostic entry
-    u_diag($medicare, $testDate, $temp, $link);
+    u_diag($medicare, $testDate, $today, $temp, $link);
 
     if (isset($_POST["otherSymps"])) {
         $new_symp = explode(",", $_POST["otherSymps"]);

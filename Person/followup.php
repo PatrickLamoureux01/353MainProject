@@ -89,7 +89,7 @@ $symptoms = get_all_symptoms($link)
                         </div>
                         <input type="hidden" name="form_submitted" value="1">
                         <input type="hidden" name="medicareNum" value=<?php echo $med;?>>
-                        <input type="hidden" name="today" value=<?php echo date("Y-m-d h:m:s") ?>>
+                        <input type="hidden" name="today" value=<?php echo date("Y-m-d H:m:s") ?>>
 
                         <button type="submit" class="btn btn-primary col-md-12">Submit Form</button>
                         
