@@ -39,12 +39,12 @@ if ($action == "create_region") {
         if ($alert > $current_level) { // alert level went up
             foreach ($people as $person) { 
                 $fullname = $person['firstName']." ".$person['lastName'];
-                insert_msg_alert_level_increase(date("Y-m-d H:i:s"),$region_name,$fullname,$person['email'],$current_level,$alert,$list,"The alert level for your region has increased. Please follow the guidelines corresponding to the alert level of your region.",$link);
+                insert_msg_alert_level_increase(date("Y-m-d H:i:s"),$region_name,$fullname,$person['email'],$current_level,$alert,$list,$link);
             }
         } else { // alert level went down
             foreach ($people as $person) { 
                 $fullname = $person['firstName']." ".$person['lastName'];
-                insert_msg_alert_level_decrease(date("Y-m-d H:i:s"),$region_name,$fullname,$person['email'],$current_level,$alert,$list,"The alert level for your region has decreased. Please follow the guidelines corresponding to the alert level of your region.",$link);
+                insert_msg_alert_level_decrease(date("Y-m-d H:i:s"),$region_name,$fullname,$person['email'],$current_level,$alert,$list,$link);
             }
         }
     }

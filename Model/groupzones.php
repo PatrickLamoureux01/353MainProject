@@ -54,5 +54,31 @@ function get_group_zone_by_id($id,$link) {
 
 }
 
+function get_all_people_in_group_zone_except_yourself($id,$medicare,$link) {
+
+    $sql = "SELECT medicareNum FROM inGroup WHERE groupZoneId = ? AND medicareNum <> ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'ii', $id,$medicare);
+    mysqli_stmt_execute($select_stmt);
+    $people = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $people;
+
+}
+
+function get_all_groupzones_of_one_person($id,$link) {
+
+    $sql = "SELECT groupZoneId FROM inGroup WHERE medicareNum = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $id);
+    mysqli_stmt_execute($select_stmt);
+    $zones = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $zones;
+
+}
+
 
 

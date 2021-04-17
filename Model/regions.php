@@ -117,4 +117,18 @@ function get_all_people_in_region($id,$link) {
     return $people;
 
 }
+
+function get_region_of_person($id,$link) {
+
+    $sql = "SELECT region.name FROM person,cityPostal,regionCity,region WHERE person.postalCode = cityPostal.postalCode AND cityPostal.cityID = regionCity.cityID AND region.regionID = regionCity.regionID AND person.medicareNum = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $id);
+    mysqli_stmt_execute($select_stmt);
+    mysqli_stmt_bind_result($select_stmt, $region);
+    mysqli_stmt_fetch($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $region;
+
+}
 ?>
