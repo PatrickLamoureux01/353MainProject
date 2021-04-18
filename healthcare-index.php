@@ -67,7 +67,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="Person/hcw_followup.php">
                     <i class="fab fa-wpforms"></i>
                     <span>Health Form</span>
                 </a>
@@ -161,8 +161,8 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                             <p><strong>FOLLOW-UP</strong></p>
                             <br>
                             <br>
-                            <p>Perform a follow-up with a COVID positive patient.</p>
-                            <button type="button" class="btn btn-outline-info btn-block" onclick="follow_up()">Perform follow-up</button>
+                            <p>Perform a follow-up with patient.</p>
+                            <button type="button" class="btn btn-outline-info btn-block" ><a href="Person/hcw_followup.php">Perform follow-up</a></button>
                         </div>
                         <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
                             <i class="fas fa-users" style="font-size:52px;"></i>

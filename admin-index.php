@@ -67,7 +67,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="Person/hcw_followup.php">
                     <i class="fab fa-wpforms"></i>
                     <span>Health Form</span>
                 </a>
@@ -163,7 +163,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                             <p><strong>PATIENTS</strong></p>
                             <br>
                             <br>
-                            <p>View, create, edit or delete from patients.</p>
+                            <p>Manage patient records</p>
                             <button type="button" class="btn btn-outline-primary btn-block" onclick="view_patients()">Access Patients</button>
                         </div>
                         <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
@@ -172,7 +172,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                             <p><strong>HEALTH WORKERS</strong></p>
                             <br>
                             <br>
-                            <p>View, create, edit or delete from health workers.</p>
+                            <p>Manage health workers</p>
                             <button type="button" class="btn btn-outline-primary btn-block" onclick="view_healthworkers()">Access Health Workers</button>
                         </div>
                         <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
@@ -181,7 +181,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                             <p><strong>FACILITIES</strong></p>
                             <br>
                             <br>
-                            <p>View, create, edit or delete from facilities.</p>
+                            <p>Manage facilities</p>
                             <button type="button" class="btn btn-outline-primary btn-block" onclick="view_facilities()">Access Facilities</button>
                         </div>
                     </div>
@@ -203,7 +203,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                             <p><strong>GROUP ZONES</strong></p>
                             <br>
                             <br>
-                            <p>View, create, edit or delete from group zones.</p>
+                            <p>Manage group zones</p>
                             <button type="button" class="btn btn-outline-primary btn-block" onclick="view_groupzones()">Access Group Zones</button>
                         </div>
                         <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
@@ -212,7 +212,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                             <p><strong>HEALTH RECOMMENDATIONS</strong></p>
                             <br>
                             <br>
-                            <p>View, create, edit or delete from health recommendations.</p>
+                            <p>Manage health recommendations</p>
                             <button type="button" class="btn btn-outline-primary btn-block" onclick="view_recommendations()">Access Health Recommendations</button>
                         </div>
                     </div>

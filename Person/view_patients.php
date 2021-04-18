@@ -158,6 +158,16 @@ $patients = get_all_patients($link);
 
     <script>
         $(document).ready(function() {
+            var table = $('#patientTable').DataTable();
+
+            $('#patientTable tbody').on('click','tr', function(){
+                var data = table.row(this).data();
+                window.location.href="view_patient.php?pid=" + data[2];
+            });
+
+
+
+
             $('#patientTable').DataTable();
 
             //$('#patientTable').addClass("clickable");
@@ -167,7 +177,6 @@ $patients = get_all_patients($link);
             });
 
         });
-
     </script>
 
 </body>
