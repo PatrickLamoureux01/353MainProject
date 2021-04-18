@@ -183,6 +183,28 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                             <button type="button" class="btn btn-outline-info btn-block" onclick="create_patient()">Create Patient</button>
                         </div>
                     </div>
+                    <hr>
+                    <div class="row" style="text-align:center;">
+                        <!-- Content Row -->
+                        <div class="col-md-4">
+                            <i class="fas fa-vial" style="font-size:52px;"></i>
+                            <p></p>
+                            <p><strong>COVID SAMPLE</strong></p>
+                            <br>
+                            <br>
+                            <p>Perform a COVID-19 test on a person.</p>
+                            <button type="button" class="btn btn-outline-info btn-block" onclick="sample()">Perform Test</button>
+                        </div>
+                        <div class="col-md-4" style="border-left:1px solid rgba(0,0,0,.1);height:250px">
+                            <i class="fas fa-vials" style="font-size:52px;"></i>
+                            <p></p>
+                            <p><strong>COVID TEST RESULTS</strong></p>
+                            <br>
+                            <br>
+                            <p>Send a notification to a patient concerning their COVID-19 test result.</p>
+                            <button type="button" class="btn btn-outline-info btn-block" onclick="result()">Send Results</button>
+                        </div>
+                    </div>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -254,6 +276,14 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
         function create_patient() {
             window.location.href="Person/create_patient.php";
+        }
+
+        function sample() {
+            window.location.href="HealthWorker/perform_test.php";
+        }
+
+        function result() {
+            window.location.href="HealthWorker/give_results.php";
         }
     </script>
 

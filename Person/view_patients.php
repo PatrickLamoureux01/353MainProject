@@ -68,8 +68,11 @@ $patients = get_all_patients($link);
 
                                                 <?php
 
-                                                if (sizeof($patients) == 0) {
-                                                    echo ('<tr><td>   </td> <td> There are no patients to display. </td> </tr>');
+                                                if (mysqli_num_rows($patients) == 0) {
+                                                    echo ('<tr>
+          <td>   </td> 
+          <td> There are no patients to display. </td> 
+        </tr>');
                                                 } else {
                                                     foreach ($patients as $patient) {
                                                         echo ('<tr><td class="clickable" data-href="view_patient.php?pid=');

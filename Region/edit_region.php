@@ -10,8 +10,18 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
 $regionID = $_GET["rid"];
 
-$r = get_region_name_by_id($link,$regionID);
+$r = get_region_by_id($regionID, $link);
 $region = mysqli_fetch_array($r);
+
+$cities = get_all_cities($link);
+
+$cities_in_region = [];
+
+$c = get_cities_in_region($regionID, $link);
+foreach ($c as $x) {
+    array_push($cities_in_region,$x['name']);
+}
+
 
 ?>
 
@@ -142,121 +152,54 @@ $region = mysqli_fetch_array($r);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Edit Health Facility</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Edit Region</h1>
                     </div>
 
-                    <form action="../Model/region_city_processor.php?action=edit" method="post">
+                    <form action="../Model/region_city_processor.php?action=edit_region" method="post">
                         <div class="form-group">
-                            <label for="facilityID" class="my-1 mr-2">Facility ID </label>
-                            <input type="text" class="form-control" id="facilityID" name="facilityID" value="<?php echo $facility['facilityId']; ?>" readonly>
+                            <label for="regionID" class="my-1 mr-2">Region ID </label>
+                            <input type="text" class="form-control" id="regionID" name="regionID" value="<?php echo $region['regionID']; ?>" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="name" class="my-1 mr-2">Institution Name </label>
-                            <input type="text" class="form-control" id="name" name="name" value="<?php echo $facility['name']; ?>">
+                            <label for="name" class="my-1 mr-2">Region Name </label>
+                            <input type="text" class="form-control" id="name" name="name" value="<?php echo $region['name']; ?>">
                         </div>
                         <div class="form-group">
-                            <label for="telNum" class="my-1 mr-2">Phone Number</label>
-                            <input type="text" class="form-control" id="telNum" name="telNum" value="<?php echo $facility['phoneNum']; ?>">
+                            <label for="alertLevel" class="my-1 mr-2">Alert Level</label>
+                            <input type="number" data-toggle="tooltip" title="The alert level could only be changed by +/- 1 and be set between 1-4." class="form-control" id="alertLevel" name="alertLevel" min="<?php
+                                                                                                                                                                                                                    if ($region['alertLevel'] == 1) {
+                                                                                                                                                                                                                        echo $region['alertLevel'];
+                                                                                                                                                                                                                    } else {
+                                                                                                                                                                                                                        echo $region['alertLevel'] - 1;
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                    ?>" max="<?php
+                                                                                                                                                                                                                                if ($region['alertLevel'] == 4) {
+                                                                                                                                                                                                                                    echo $region['alertLevel'];
+                                                                                                                                                                                                                                } else {
+                                                                                                                                                                                                                                    echo $region['alertLevel'] + 1;
+                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                ?>" value="<?php echo $region['alertLevel']; ?>">
                         </div>
                         <div class="form-group">
-                            <label for="type" class="my-1 mr-2">Type of Institution</label><br>
-                            <select class="selectpicker" id="type" name="type">
-                            <?php
-                            if ($facility['type'] == "Hospital") {
-                                ?>
-                                <option value="Hospital" selected>Hospital</option>
+                            <label for="cities" class="my-1 mr-2">Cities in this region </label><br>
+                            <select class="selectpicker" id="cities" name="cities[]" data-live-search="true" multiple data-selected-text-format="count > 3" data-actions-box="true">
                                 <?php
-                            } else {
+                                foreach ($cities as $city) {
+
+                                    if (in_array($city['name'],$cities_in_region)) {
                                 ?>
-                                <option value="Hospital">Hospital</option>
+                                        <option value="<?php echo $city['cityID']; ?>" selected><?php echo $city['name']; ?></option>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <option value="<?php echo $city['cityID']; ?>"><?php echo $city['name']; ?></option>
                                 <?php
-                            }
-                            ?>
-                            <?php
-                            if ($facility['type'] == "Clinic") {
+                                    }
+                                }
                                 ?>
-                                <option value="Clinic" selected>Clinic</option>
-                                <?php
-                            } else {
-                                ?>
-                                <option value="Clinic">Clinic</option>
-                                <?php
-                            }
-                            ?>
-                            <?php
-                            if ($facility['type'] == "Special Installation") {
-                                ?>
-                                <option value="Special Installation" selected>Special Installation</option>
-                                <?php
-                            } else {
-                                ?>
-                                <option value="Special Installation">Special Installation</option>
-                                <?php
-                            }
-                            ?>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="address" class="my-1 mr-2">Address</label>
-                            <input type="text" class="form-control" id="address" name="address" value="<?php echo $facility['address']; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="website" class="my-1 mr-2">Website</label>
-                            <input type="text" class="form-control" id="website" name="website" value="<?php echo $facility['website']; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="adminType" class="my-1 mr-2">Administration Type </label><br>
-                            <select class="selectpicker" id="adminType" name="adminType">
-                            <?php
-                            if ($facility['adminType'] == "1") {
-                                ?>
-                                <option value="1" selected>Appointment Only</option>
-                                <?php
-                            } else {
-                                ?>
-                                <option value="1">Appointment Only</option>
-                                <?php
-                            }
-                            ?>
-                            <?php
-                            if ($facility['adminType'] == "2") {
-                                ?>
-                                <option value="2" selected>Walk-In Only</option>
-                                <?php
-                            } else {
-                                ?>
-                                <option value="2">Walk-in Only</option>
-                                <?php
-                            }
-                            ?>
-                            <?php
-                            if ($facility['adminType'] == "3") {
-                                ?>
-                                <option value="3" selected>Appointment & Walk-In</option>
-                                <?php
-                            } else {
-                                ?>
-                                <option value="3">Appointment & Walk-In</option>
-                                <?php
-                            }
-                            ?>
-                            </select>
-                        </div>
-                        <div class="form-check">
-                            <?php
-                            if ($drivethru == "0") {
-                            ?>
-                                <input class="form-check-input" type="checkbox" name="drivethru" id="drivethru">
-                            <?php
-                            } else {
-                            ?>
-                                <input class="form-check-input" type="checkbox" name="drivethru" id="drivethru" checked>
-                            <?php
-                            }
-                            ?>
-                            <label class="form-check-label" for="drivethru">Drive-Thru Capable?</label>
-                        </div>
-                        <button type="submit" class="btn btn-outline-primary">Update Health Institution</button>
+                        <button type="submit" class="btn btn-outline-primary">Update Region</button>
 
                     </form>
 

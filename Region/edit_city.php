@@ -8,7 +8,20 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$cities = get_all_cities($link);
+$cityID = $_GET["cid"];
+
+$c = get_city_by_id($cityID, $link);
+$city = mysqli_fetch_array($c);
+
+$postals = get_all_postal_codes($link);
+
+$codes_in_city = [];
+
+$cd = get_postal_codes_by_city_id($cityID, $link);
+foreach ($cd as $x) {
+    array_push($codes_in_city,$x['code']);
+}
+
 
 ?>
 
@@ -17,8 +30,7 @@ $cities = get_all_cities($link);
 
 
 <?php include('../nav/htmlheader.php'); ?>
-<title>Create Region - <?php echo $fname; ?></title>
-
+<title>Edit City - <?php echo $city['name']; ?></title>
 
 
 <body id="page-top">
@@ -140,35 +152,38 @@ $cities = get_all_cities($link);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Create Region</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Edit City</h1>
                     </div>
 
-                    <form action="../Model/region_city_processor.php?action=create_region" method="post">
+                    <form action="../Model/region_city_processor.php?action=edit_city" method="post">
                         <div class="form-group">
-                            <label for="regionID" class="my-1 mr-2">Region ID </label>
-                            <input type="text" class="form-control" id="regionID" name="regionID" required>
+                            <label for="cityID" class="my-1 mr-2">City ID </label>
+                            <input type="text" class="form-control" id="cityID" name="cityID" value="<?php echo $city['cityID']; ?>" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="name" class="my-1 mr-2">Region Name </label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <label for="name" class="my-1 mr-2">City Name </label>
+                            <input type="text" class="form-control" id="name" name="name" value="<?php echo $city['name']; ?>">
                         </div>
                         <div class="form-group">
-                            <label for="alertLevel" class="my-1 mr-2">Alert Level</label>
-                            <input type="number" class="form-control" id="alertLevel" name="alertLevel" min="1" max="4" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="cities" class="my-1 mr-2">Cities in this region </label><br>
-                            <select class="selectpicker" id="cities" name="cities[]" data-live-search="true" multiple data-selected-text-format="count > 3" data-actions-box="true">
+                            <label for="postals" class="my-1 mr-2">Postal codes in this city </label><br>
+                            <select class="selectpicker" id="postals" name="postals[]" data-live-search="true" multiple data-selected-text-format="count > 3" data-actions-box="true">
                                 <?php
-                                foreach ($cities as $city) {
+                                foreach ($postals as $p) {
+                                    if (in_array($p['code'],$codes_in_city)) {
                                 ?>
-                                <option value="<?php echo $city['cityID']; ?>"><?php echo $city['name']; ?></option>
+                                        <option value="<?php echo $p['code']; ?>" selected><?php echo $p['code']; ?></option>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <option value="<?php echo $p['code']; ?>"><?php echo $p['code']; ?></option>
                                 <?php
+                                    }
                                 }
                                 ?>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-outline-primary">Create Region</button>
+                        <button type="submit" class="btn btn-outline-primary">Update City</button>
+
                     </form>
 
                 </div>
@@ -198,10 +213,10 @@ $cities = get_all_cities($link);
         <i class="fas fa-angle-up"></i>
     </a>
 
-   <!-- Logout Modal-->
-   <?php include('../nav/logout.php'); ?>
+    <!-- Logout Modal-->
+    <?php include('../nav/logout.php'); ?>
 
-   <?php include('../nav/footer.php'); ?>
+    <?php include('../nav/footer.php'); ?>
 
 </body>
 

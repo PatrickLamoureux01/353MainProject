@@ -10,8 +10,10 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
 $regionID = $_GET["rid"];
 
-$r = get_region_name_by_id($link,$regionID);
+$r = get_region_by_id($regionID,$link);
 $region = mysqli_fetch_array($r);
+
+$cities = get_cities_in_region($regionID,$link);
 
 ?>
 
@@ -153,31 +155,19 @@ $region = mysqli_fetch_array($r);
 
 
                             <h4 class="card-title" style="text-decoration:underline;">Region Information</h4>
-                            <p class="card-text"><strong>Facility ID:</strong> <?php echo ($facility['facilityId']); ?></p>
-                            <p class="card-text"><strong>Institution Name:</strong> <?php echo ($facility['name']); ?></p>
-                            <p class="card-text"><strong>Institution Type:</strong> <?php echo ($facility['type']); ?></p>
-                            <p class="card-text"><strong>Telephone Number:</strong> <?php echo ($facility['phoneNum']); ?></p>
-                            <p class="card-text"><strong>Address:</strong> <?php echo ($facility['address']); ?></p>
-                            <p class="card-text"><strong>Website:</strong> <?php echo ($facility['website']); ?></p>
-                            <p class="card-text"><strong>Drive-Thru Capable:</strong>
-                            <?php 
-                            if ($facility['doesDriveThru'] == "0") {
-                                echo "No";
-                            } else {
-                                echo "Yes";
-                            }
-                             ?>
-                            </p>
-                            <p class="card-text"><strong>Apointment Type:</strong>
-                            <?php 
-                            if ($facility['adminType'] == "1") {
-                                echo "Appointment Only";
-                            } else if ($facility['adminType'] == "2") {
-                                echo "Walk-In Only";
-                            } else {
-                                echo "Both Appointment and Walk-In";
+                            <p class="card-text"><strong>Region ID:</strong> <?php echo ($region['regionID']); ?></p>
+                            <p class="card-text"><strong>Region Name:</strong> <?php echo ($region['name']); ?></p>
+                            <p class="card-text"><strong>Alert Level:</strong> <?php echo ($region['alertLevel']); ?></p>
+                            <p class="card-text"><strong>Cities in this region:</strong><ul>
+                            <?php
+                            foreach($cities as $city) {
+                                ?>
+                                    <li><?php echo $city['name']; ?></li>
+                                <?php
                             }
                             ?></p>
+                            </ul>
+                            
                         </div>
                     </div>
 

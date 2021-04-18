@@ -74,7 +74,7 @@ $patients = get_all_patients($link);
 
                                                 <?php
 
-                                                if (sizeof($patients) == 0) {
+                                                if (mysqli_num_rows($patients) == 0) {
                                                     echo ('<tr>
           <td>   </td> 
           <td> There are no patients to display. </td> 

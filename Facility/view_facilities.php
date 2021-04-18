@@ -169,7 +169,7 @@ $facilities = get_all_health_centers($link);
 
                                                 <?php
 
-                                                if (sizeof($facilities) == 0) {
+                                                if (mysqli_num_rows($facilities) == 0) {
                                                     echo ('<tr>
           <td>   </td> 
           <td> There are no health centers to display. </td> 

@@ -9,6 +9,7 @@ $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
 $regions = get_all_regions($link);
+$cities = get_all_cities($link);
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +17,7 @@ $regions = get_all_regions($link);
 
 <?php include('../nav/htmlheader.php'); ?>
 <title>View All Regions</title>
+
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -147,12 +149,12 @@ $regions = get_all_regions($link);
                     <div class="row">
 
                         <div class="col-xl-12 mb-4">
-                            <!-- DataTales Example -->
+                            <!-- Regions -->
                             <div class="card shadow">
-                                <div class="card-header py-3">
+                                <div class="card-header py-3" data-toggle="collapse" data-target="#regionCollapse">
                                     <h6 class="m-0 font-weight-bold text-primary">All Regions</h6>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body collapse" id="regionCollapse">
                                     <div class="table-responsive">
                                         <table class="table table-hover table-sm" id="regionsTable" width="100%" cellspacing="0" data-page-list="[10, 20, 25, 50, 100, 200, All]">
                                             <thead>
@@ -167,7 +169,7 @@ $regions = get_all_regions($link);
 
                                                 <?php
 
-                                                if (sizeof($regions) == 0) {
+                                                if (mysqli_num_rows($regions) == 0) {
                                                     echo ('<tr>
           <td>   </td> 
           <td> There are no regions to display. </td> 
@@ -189,6 +191,53 @@ $regions = get_all_regions($link);
                                                         echo $region['regionID'];
                                                         echo ('" data-name="');
                                                         echo ($region['name']);
+                                                        echo ('">Delete</button>');
+                                                        echo ('</td></tr>');
+                                                    }
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Cities -->
+                            <div class="card shadow">
+                                <div class="card-header py-3" data-toggle="collapse" data-target="#citiesCollapse">
+                                    <h6 class="m-0 font-weight-bold text-primary">All Cities</h6>
+                                </div>
+                                <div class="card-body collapse" id="citiesCollapse">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-sm" id="citiesTable" width="100%" cellspacing="0" data-page-list="[10, 20, 25, 50, 100, 200, All]">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <?php
+
+                                                if (mysqli_num_rows($cities) == 0) {
+                                                    echo ('<tr>
+          <td>   </td> 
+          <td> There are no cities to display. </td> 
+        </tr>');
+                                                } else {
+                                                    foreach ($cities as $city) {
+                                                        echo ('<tr><td class="clickable" data-href="view_city.php?cid=');
+                                                        echo $city['cityID'];
+                                                        echo ('">');
+                                                        echo ($city['name']);
+                                                        echo ('</td><td class="clickable" data-href="edit_city.php?cid=');
+                                                        echo $city['cityID'];
+                                                        echo ('"><button type="button" class="btn btn-secondary">Edit</button>');
+                                                        echo ('</td><td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteCityModal" data-id="');
+                                                        echo $city['cityID'];
+                                                        echo ('" data-name="');
+                                                        echo ($city['name']);
                                                         echo ('">Delete</button>');
                                                         echo ('</td></tr>');
                                                     }
@@ -230,10 +279,10 @@ $regions = get_all_regions($link);
         <i class="fas fa-angle-up"></i>
     </a>
 
-   <!-- Logout Modal-->
-   <?php include('../nav/logout.php'); ?>
+    <!-- Logout Modal-->
+    <?php include('../nav/logout.php'); ?>
 
-    <!-- Delete Patient Modal-->
+    <!-- Delete Region Modal-->
     <div class="modal fade" id="deleteRegionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -246,7 +295,26 @@ $regions = get_all_regions($link);
                 <div class="modal-body">
                     <p id="delete_txt"></p>
                     <p id="tmp"></p>
-                    <button type="button" onclick="delete_facility()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Region</button>
+                    <button type="button" onclick="delete_region()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Region</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete City Modal-->
+    <div class="modal fade" id="deleteCityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to continue?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="delete2_txt"></p>
+                    <p id="tmp"></p>
+                    <button type="button" onclick="delete_city()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete City</button>
                 </div>
             </div>
         </div>
@@ -259,6 +327,8 @@ $regions = get_all_regions($link);
             $('#regionsTable').DataTable({
                 pageLength: 20
             });
+
+            $('#citiesTable').DataTable();
 
             $(".clickable").click(function(e) {
                 window.location = $(this).data("href");
@@ -277,15 +347,39 @@ $regions = get_all_regions($link);
             $('#tmp').val(id);
         });
 
-        function delete_facility() {
+        $('#deleteCityModal').on('shown.bs.modal', function(event) {
+
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var name = button.data('name') // Extract patient name
+            var id = button.data('id') // Extract patient ID
+
+            $('#delete2_txt').html("You are about to delete <strong>" + name + "</strong> from the city records.");
+            $('#tmp').val(id);
+        });
+
+        function delete_region() {
 
             var id = $('#tmp').val();
 
             $.ajax({
                 type: "POST",
-                url: "../Model/region_city_processor.php?action=delete",
+                url: "../Model/region_city_processor.php?action=delete_region",
                 data: {
-                    action: "delete",
+                    id: id
+                }
+            }).done(function(msg) {
+                parent.window.location.reload();
+            });
+        }
+
+        function delete_city() {
+
+            var id = $('#tmp').val();
+
+            $.ajax({
+                type: "POST",
+                url: "../Model/region_city_processor.php?action=delete_city",
+                data: {
                     id: id
                 }
             }).done(function(msg) {

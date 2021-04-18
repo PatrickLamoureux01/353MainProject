@@ -70,6 +70,19 @@ function get_all_patients($link)
     return $patients;
 }
 
+function get_all_patients_except_yourself($id, $link)
+{
+
+    $sql = "SELECT * FROM person WHERE medicareNum <> ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $id);
+    mysqli_stmt_execute($select_stmt);
+    $patients = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $patients;
+}
+
 function get_patient_by_medicare($link, $medicare)
 {
 
@@ -100,3 +113,50 @@ function does_person_already_exist($medicare, $link)
     }
     mysqli_stmt_close($select_stmt);
 }
+
+function create_test($testDate,$patient,$adminBy,$facility,$link)
+{
+
+    $sql = "INSERT INTO diagnostic(testDate,resultDate,testResult,patient,adminBy,facilityId,followupTemperature,followedUp) VALUES(?,null,null,?,?,?,null,null)";
+    $insert_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($insert_stmt, 'siii', $testDate,$patient,$adminBy,$facility);
+    mysqli_stmt_execute($insert_stmt);
+    mysqli_stmt_close($insert_stmt);
+}
+
+function log_test_result($patient,$testDate,$result,$resultDate,$link) {
+
+    $sql = "UPDATE diagnostic SET resultDate = ?, testResult = ? WHERE patient = ? AND testDate = ?";
+    $update_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($update_stmt, 'siis', $resultDate,$result,$patient,$testDate);
+    mysqli_stmt_execute($update_stmt);
+    mysqli_stmt_close($update_stmt);
+
+}
+
+function get_all_patients_awaiting_results($link) {
+
+    $sql = "SELECT patient,testDate FROM diagnostic WHERE testResult IS NULL";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_execute($select_stmt);
+    $patients = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $patients;
+
+}
+
+function get_email($id,$link) {
+
+    $sql = "SELECT email FROM person WHERE medicareNum = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $id);
+    mysqli_stmt_execute($select_stmt);
+    mysqli_stmt_bind_result($select_stmt, $email);
+    mysqli_stmt_fetch($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $email;
+
+}
+?>
