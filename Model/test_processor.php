@@ -34,10 +34,10 @@ if ($action == "perform_test") {
         insert_msg_covid_test_positive(date("Y-m-d H:i:s"),$region,$name,$email,$link);
         insert_msg_questionnaire_reminder(date("Y-m-d H:i:s"),$region,$name,$email,$link);
         foreach ($group_zones as $group) { // for each of the positive person's group zones
-            //var_dump($group);
+
             $people = get_all_people_in_group_zone_except_yourself($group['groupZoneId'],$patientInfo[0],$link); // get all the people in each zone
             foreach ($people as $person) { // for each person
-                //var_dump($person);
+
                 $p_name = get_full_name($link,$person['medicareNum']); // get their name
                 $p_email = get_email($person['medicareNum'],$link); // get their email
                 $p_region = get_region_of_person($person['medicareNum'],$link); // get their region
