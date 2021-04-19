@@ -158,8 +158,6 @@ $healthrec = get_all_public_health_rec($link);
                                                 <tr>
                                                     <th>Recommendation</th>
                                                     <th>Alert Level</th>
-                                                    <th></th>
-                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -181,14 +179,6 @@ $healthrec = get_all_public_health_rec($link);
                                                         echo $rec['recommendationID'];
                                                         echo ('">');
                                                         echo ($rec['alertLevel']);
-                                                        echo ('</td><td class="clickable" data-href="edit_publichealthrecommendation.php?fid=');
-                                                        echo $rec['recommendationID'];
-                                                        echo ('"><button type="button" class="btn btn-secondary">Edit</button>');
-                                                        echo ('</td><td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePublicHealthRecModal" data-id="');
-                                                        echo $rec['recommendationID'];
-                                                        echo ('" data-name="');
-                                                        echo ($rec['recommendation']);
-                                                        echo ('">Delete</button>');
                                                         echo ('</td></tr>');
                                                     }
                                                 }
@@ -232,63 +222,21 @@ $healthrec = get_all_public_health_rec($link);
    <!-- Logout Modal-->
    <?php include('../nav/logout.php'); ?>
 
-    <!-- Delete Public health rec Modal-->
-    <div class="modal fade" id="deletePublicHealthRecModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to continue?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p id="delete_txt"></p>
-                    <p id="tmp"></p>
-                    <button type="button" onclick="delete_public_health_rec()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Public Health Recommendation</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <?php include('../nav/footer.php'); ?>
 
     <script>
         $(document).ready(function() {
-            $('#publicHealthRecTable').DataTable();
+            var table = $('#publicHealthRecTable').DataTable();
 
-            $(".clickable").click(function(e) {
-                window.location = $(this).data("href");
+            $('#publicHealthRecTable tbody').on('click', 'tr', function() {
+                var data = table.row(this).data();
+                window.location.href = "view_publichealthrecommendation.php?fid=" + data[2];
             });
 
         });
 
-        $('#deletePublicHealthRecModal').on('shown.bs.modal', function(event) {
-
-
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var name = button.data('name') // Extract patient name
-            var id = button.data('id') // Extract patient ID
-
-            $('#delete_txt').html("You are about to delete <strong>" + name + "</strong> from the public health recommendations.");
-            $('#tmp').val(id);
-        });
-
-        function delete_public_health_rec() {
-
-            var id = $('#tmp').val();
-
-            $.ajax({
-                type: "POST",
-                url: "../Model/publichealthrecommendation_processor.php?action=delete",
-                data: {
-                    action: "delete",
-                    id: id
-                }
-            }).done(function(msg) {
-                parent.window.location.reload();
-            });
-        }
     </script>
 
 </body>
