@@ -85,28 +85,40 @@ function person_set_symptom($med, $symptom, $recorded, $link){
 }
 
 function get_test_symptoms($med, $testDate, $link){
-    $sql = "SELECT ps.medicareNum,
-        p.firstName,
-        p.lastName, 
-        date(ps.lastRecorded) as lastRecorded, 
-        s.name as symptom,
-        d.testDate
-    FROM personSymptom ps, person p, symptoms s, diagnostic d 
-    where ps.medicareNum = p.medicareNum 
-        and d.followedUp = ps.lastRecorded 
-        and s.symptomID = ps.symptomID
-        and ps.medicareNum = ?
-        and testDate = ?";
 
+    $sql = "SELECT ps.medicareNum,
+    p.firstName,
+    p.lastName, 
+    date(ps.lastRecorded) as lastRecorded, 
+    s.name as symptom,
+    d.testDate
+FROM personSymptom ps, person p, symptoms s, diagnostic d 
+where ps.medicareNum = p.medicareNum 
+    and d.followedUp = ps.lastRecorded 
+    and s.symptomID = ps.symptomID
+    and ps.medicareNum = ?
+    and testDate = ?";
+
+$select_stmt = mysqli_prepare($link, $sql);
+mysqli_stmt_bind_param($select_stmt, 'is', $med, $testDate);
+mysqli_stmt_execute($select_stmt);
+$symptoms = mysqli_stmt_get_result($select_stmt);
+mysqli_stmt_close($select_stmt);
+
+return $symptoms;
+
+}
+
+function get_tests_on_date($start,$end,$link) {
+
+    $sql = "SELECT * FROM diagnostic WHERE resultDate BETWEEN ? AND ?";
     $select_stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($select_stmt, 'is', $med, $testDate);
+    mysqli_stmt_bind_param($select_stmt, 'ss', $start,$end);
     mysqli_stmt_execute($select_stmt);
-    $symptoms = mysqli_stmt_get_result($select_stmt);
+    $tests = mysqli_stmt_get_result($select_stmt);
     mysqli_stmt_close($select_stmt);
 
-    return $symptoms;
-
-
+    return $tests;
 
 }
 

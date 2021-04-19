@@ -31,10 +31,14 @@ $isAdmin = check_admin($_SESSION["User"],$link);
     <div id="wrapper">
 
         <!-- Sidebar -->
+
         <?php
+        if ($isAdmin == 0) {
             include('../nav/hcw_sidebar.php'); 
-            ?>
-       
+        } else {
+            include('../nav/admin_sidebar.php'); 
+        }
+        ?>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -69,6 +73,9 @@ $isAdmin = check_admin($_SESSION["User"],$link);
                             <p class="card-text"><strong>Province:</strong> <?php echo ($patient['province']); ?></p>
                             <p class="card-text"><strong>Address:</strong> <?php echo ($patient['address']); ?></p>
                             <p class="card-text"><strong>Postal Code:</strong> <?php echo ($patient['postalCode']); ?></p>
+                            <button type="button" onclick="window.location.href='edit_patient.php?pid=<?php echo $patient['medicareNum'];?>'" class="btn btn-secondary" >Edit Patient</button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePatientModal" data-id="<?php echo $patient['medicareNum']; ?>"
+                            data-name="<?php echo $patient['firstName']." ".$patient['lastName']; ?>">Delete</button>
                         </div>
                         <div class="card-box px-2">
                         <h4 class="card-title" style="text-decoration:underline;">Symptom Information</h4>
@@ -140,7 +147,56 @@ $isAdmin = check_admin($_SESSION["User"],$link);
     <!-- Logout Modal-->
     <?php include('../nav/logout.php'); ?>
 
+        <!-- Delete Patient Modal-->
+        <div class="modal fade" id="deletePatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to continue?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="delete_txt"></p>
+                    <p id="tmp"></p>
+                    <button type="button" onclick="delete_patient()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Patient</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php include('../nav/footer.php'); ?>
+
+    <script>
+
+        $('#deletePatientModal').on('shown.bs.modal', function(event) {
+
+
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var name = button.data('name') // Extract patient name
+            var id = button.data('id') // Extract patient ID
+
+            $('#delete_txt').html("You are about to delete <strong>" + name + "</strong> from the patient records.");
+            $('#tmp').val(id);
+        });
+
+        function delete_patient() {
+
+            var id = $('#tmp').val();
+
+            $.ajax({
+                type: "POST",
+                url: "../Model/patient_processor.php?action=delete",
+                data: {
+                    action: "delete",
+                    id: id
+                }
+            }).done(function(msg) {
+                window.location.href = "Person/view_patients_admin.php";
+            });
+        }
+    </script>
 </body>
 
 </html>

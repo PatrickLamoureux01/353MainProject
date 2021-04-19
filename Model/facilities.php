@@ -54,6 +54,20 @@ function get_facility_by_id($id,$link) {
 
 }
 
+function get_facility_id_by_name($name,$link) {
+
+    $sql = "SELECT facilityId FROM publicHealthCenter WHERE name = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 's', $name);
+    mysqli_stmt_execute($select_stmt);
+    mysqli_stmt_bind_result($select_stmt, $id);
+    mysqli_stmt_fetch($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $id;
+
+}
+
 function doesDriveThru($id,$link) {
 
     $sql = "SELECT doesDriveThru FROM publicHealthCenter WHERE facilityId = ?";
@@ -65,6 +79,38 @@ function doesDriveThru($id,$link) {
     mysqli_stmt_close($select_stmt);
 
     return $drivethru;
+
+}
+
+function get_number_of_emps($id,$link) {
+
+    $sql = "SELECT workerId FROM workedAt WHERE facilityId = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $id);
+    mysqli_stmt_execute($select_stmt);
+    $worker = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return mysqli_num_rows($worker);
+
+}
+
+function get_all_workers_of_facility($id,$link) {
+
+    $sql = "SELECT workerId FROM workedAt WHERE facilityId = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $id);
+    mysqli_stmt_execute($select_stmt);
+    $workers = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $workers;
+
+}
+
+function q16($date,$faciliy,$link) {
+
+    $sql = "SELECT workerId FROM diagnostic WHERE resultDate = ?";
 
 }
 

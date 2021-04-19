@@ -66,8 +66,6 @@ $patients = get_all_patients($link);
                                                     <th>DOB</th>
                                                     <th>E-mail</th>
                                                     <th>Address</th>
-                                                    <th></th>
-                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -81,39 +79,32 @@ $patients = get_all_patients($link);
         </tr>');
                                                 } else {
                                                     foreach ($patients as $patient) {
-                                                        echo ('<tr><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo ('<tr><td class="clickable" data-href="view_patient_admin.php?pid=');
                                                         echo $patient['medicareNum'];
                                                         echo ('">');
                                                         echo ($patient['firstName']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo ('</td><td class="clickable" data-href="view_patient_admin.php?pid=');
                                                         echo $patient['medicareNum'];
                                                         echo ('">');
                                                         echo ($patient['lastName']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo ('</td><td class="clickable" data-href="view_patient_admin.php?pid=');
                                                         echo $patient['medicareNum'];
                                                         echo ('">');
                                                         echo ($patient['medicareNum']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo ('</td><td class="clickable" data-href="view_patient_admin.php?pid=');
                                                         echo $patient['medicareNum'];
                                                         echo ('">');
                                                         echo ($patient['dob']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo ('</td><td class="clickable" data-href="view_patient_admin.php?pid=');
                                                         echo $patient['medicareNum'];
                                                         echo ('">');
                                                         echo ($patient['email']);
-                                                        echo ('</td><td class="clickable" data-href="view_patient.php?pid=');
+                                                        echo ('</td><td class="clickable" data-href="view_patient_admin.php?pid=');
                                                         echo $patient['medicareNum'];
                                                         echo ('">');
                                                         echo ($patient['address']);
-                                                        echo ('</td><td class="clickable" data-href="edit_patient.php?pid=');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('"><button type="button" class="btn btn-secondary">Edit</button>');
-                                                        echo ('</td><td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePatientModal" data-id="');
-                                                        echo $patient['medicareNum'];
-                                                        echo ('" data-name="');
-                                                        echo ($patient['firstName'] . " " . $patient['lastName']);
-                                                        echo ('">Delete</button>');
-                                                        echo ('</td></tr>');
+                                                        echo ('</td>
+                                                        </tr>');
                                                     }
                                                 }
                                                 ?>
@@ -178,17 +169,8 @@ $patients = get_all_patients($link);
 
             $('#patientTable tbody').on('click', 'tr', function() {
                 var data = table.row(this).data();
-                window.location.href = "view_patient.php?pid=" + data[2];
+                window.location.href = "view_patient_admin.php?pid=" + data[2];
             });
-
-
-
-
-            // $('#patientTable').DataTable();
-
-            // $(".clickable").click(function(e) {
-            //     window.location = $(this).data("href");
-            // });
 
         });
 

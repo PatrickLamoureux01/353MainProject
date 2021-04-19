@@ -44,6 +44,48 @@ function get_Fname($link, $medicare)
     return $fname;
 }
 
+function get_Lname($link, $medicare)
+{
+
+    $sql = "SELECT lastName FROM person WHERE medicareNum = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $medicare);
+    mysqli_stmt_execute($select_stmt);
+    mysqli_stmt_bind_result($select_stmt, $lname);
+    mysqli_stmt_fetch($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $lname;
+}
+
+function get_dob($link, $medicare)
+{
+
+    $sql = "SELECT dob FROM person WHERE medicareNum = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $medicare);
+    mysqli_stmt_execute($select_stmt);
+    mysqli_stmt_bind_result($select_stmt, $dob);
+    mysqli_stmt_fetch($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $dob;
+}
+
+function get_tel($link, $medicare)
+{
+
+    $sql = "SELECT telNum FROM person WHERE medicareNum = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $medicare);
+    mysqli_stmt_execute($select_stmt);
+    mysqli_stmt_bind_result($select_stmt, $tel);
+    mysqli_stmt_fetch($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $tel;
+}
+
 function get_full_name($link, $medicare)
 {
 
@@ -157,6 +199,46 @@ function get_email($id,$link) {
     mysqli_stmt_close($select_stmt);
 
     return $email;
+
+}
+
+function get_people_by_address($address,$link) {
+
+    $sql = "SELECT * FROM person WHERE address = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 's', $address);
+    mysqli_stmt_execute($select_stmt);
+    $people = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $people;
+}
+
+function get_mother($id,$link) {
+
+    $sql = "SELECT firstName,lastName FROM person WHERE person.medicareNum = (SELECT motherMedicareNum FROM parentOf WHERE personMedicareNum = ?)";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $id);
+    mysqli_stmt_execute($select_stmt);
+    mysqli_stmt_bind_result($select_stmt,$fname,$lname);
+    mysqli_stmt_fetch($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $fname." ".$lname;
+
+}
+
+function get_father($id,$link) {
+
+    $sql = "SELECT firstName,lastName FROM person WHERE person.medicareNum = (SELECT fatherMedicareNum FROM parentOf WHERE personMedicareNum = ?)";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'i', $id);
+    mysqli_stmt_execute($select_stmt);
+    mysqli_stmt_bind_result($select_stmt,$fname,$lname);
+    mysqli_stmt_fetch($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $fname." ".$lname;
 
 }
 ?>

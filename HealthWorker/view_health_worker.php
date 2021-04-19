@@ -24,6 +24,7 @@ $isAdmin = check_admin($personID, $link);
 
 <?php include('../nav/htmlheader.php'); ?>
 <title>View Health Worker - <?php echo $patient_name; ?></title>
+
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -75,6 +76,8 @@ $isAdmin = check_admin($personID, $link);
                                     echo "Yes";
                                 }
                                 ?></p>
+                            <button type="button" onclick="window.location.href='edit_health_worker.php?pid=<?php echo $person['medicareNum']; ?>'" class="btn btn-secondary">Edit Health Worker</button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWorkerModal" data-id="<?php echo $person['medicareNum']; ?>" data-name="<?php echo $person['firstName'] . " " . $person['lastName']; ?>">Delete</button>
                         </div>
                     </div>
 
@@ -102,7 +105,55 @@ $isAdmin = check_admin($personID, $link);
     <!-- Logout Modal-->
     <?php include('../nav/logout.php'); ?>
 
+
+    <!-- Delete Modal-->
+    <div class="modal fade" id="deleteWorkerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to continue?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="delete_txt"></p>
+                    <p id="tmp"></p>
+                    <button type="button" onclick="delete_worker()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Health Worker</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php include('../nav/footer.php'); ?>
+    <script>
+        $('#deleteWorkerModal').on('shown.bs.modal', function(event) {
+
+
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var name = button.data('name') // Extract patient name
+            var id = button.data('id') // Extract patient ID
+
+            $('#delete_txt').html("You are about to delete <strong>" + name + "</strong> from the health worker records.");
+            $('#tmp').val(id);
+        });
+
+        function delete_worker() {
+
+            var id = $('#tmp').val();
+
+            $.ajax({
+                type: "POST",
+                url: "../Model/worker_processor.php?action=delete",
+                data: {
+                    action: "delete",
+                    id: id
+                }
+            }).done(function(msg) {
+                window.location.href="HealthWorker/view_health_workers.php"
+            });
+        }
+    </script>
 
 
 </body>

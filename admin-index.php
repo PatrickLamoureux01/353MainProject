@@ -60,35 +60,6 @@ $fullname = get_full_name($link, $_SESSION["User"]);
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                COVID-19 Tracking
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="Person/hcw_followup.php">
-                    <i class="fab fa-wpforms"></i>
-                    <span>Health Form</span>
-                </a>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li>
 
         </ul>
         <!-- End of Sidebar -->
@@ -153,7 +124,7 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                         <h1 class="h3 mb-0 text-gray-800"><?php echo $fname; ?>'s Admin Dashboard</h1>
                     </div>
 
-                    
+
 
                     <div class="row" style="text-align:center;">
                         <!-- Content Row -->
@@ -216,6 +187,14 @@ $fullname = get_full_name($link, $_SESSION["User"]);
                             <button type="button" class="btn btn-outline-primary btn-block" onclick="view_recommendations()">Access Health Recommendations</button>
                         </div>
                     </div>
+                    <button type="button" class="btn btn-outline-primary btn-block" onclick="Q_10()">Q10</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" onclick="Q_11()">Q11</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" onclick="Q_12()">Q12</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" onclick="Q_13()">Q13</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" onclick="Q_14()">Q14</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" onclick="Q_15()">Q15</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" onclick="Q_16()">Q16</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" onclick="Q_17()">Q17</button>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -272,13 +251,47 @@ $fullname = get_full_name($link, $_SESSION["User"]);
         }
 
         function view_regions() {
-            window.location.href= "Region/view_regions_cities.php";
+            window.location.href = "Region/view_regions_cities.php";
         }
+
         function view_groupzones() {
             window.location.href = "GroupZone/view_groupzones.php";
         }
+
         function view_recommendations() {
             window.location.href = "PublicHealthRecommendation/view_publichealthrecommendations.php";
+        }
+
+        function Q_10() {
+            window.location.href = "Queries/Q10.php";
+        }
+
+        function Q_11() {
+            window.location.href = "Queries/Q11.php";
+        }
+
+        function Q_12() {
+            window.location.href = "Queries/Q12p.php";
+        }
+
+        function Q_13() {
+            window.location.href = "Queries/Q13p.php";
+        }
+
+        function Q_14() {
+            window.location.href = "Queries/Q14.php";
+        }
+
+        function Q_15() {
+            window.location.href = "Queries/Q15.php";
+        }
+
+        function Q_16() {
+            window.location.href = "Queries/Q16.php";
+        }
+
+        function Q_17() {
+            window.location.href = "Queries/Q17.php";
         }
     </script>
 

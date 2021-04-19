@@ -66,4 +66,17 @@ function insert_msg_exposed_to_positive($datetime,$region,$person,$email,$link) 
 
 }
 
+function get_messages_between_two_dates($start,$end,$link) {
+
+    $sql = "SELECT * FROM messages WHERE broadcastDateTime BETWEEN ? AND ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'ss', $start,$end);
+    mysqli_stmt_execute($select_stmt);
+    $msgs = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $msgs;
+
+}
+
 ?>
