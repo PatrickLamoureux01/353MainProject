@@ -108,9 +108,18 @@ function get_all_workers_of_facility($id,$link) {
 
 }
 
-function q16($date,$faciliy,$link) {
+function get_all_facilities_worked_at_14_days($id,$start,$end,$link) {
 
-    $sql = "SELECT workerId FROM diagnostic WHERE resultDate = ?";
+    $sql = "SELECT facilityId FROM workedAt WHERE workerId = ? AND startDatetime >= ? AND endDatetime <= ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'iss', $id,$start,$end);
+    mysqli_stmt_execute($select_stmt);
+    $facilities = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $facilities;
 
 }
+
+
 

@@ -10,10 +10,16 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
 
 $date = $_POST["date"];
+$start = $date." 00:00:00";
+$end = $date." 23:59:59";
 $facility = $_POST["facility"];
-$workers = q16($date,$facility,$link);
-
-
+$workers = q16($start,$end,$facility,$link);
+$begin_date = date('Y-m-d H:m:s',strtotime($start.'-14 days'));
+// var_dump($start);
+// var_dump($begin_date);
+// foreach ($workers as $w) {
+//     var_dump($w);
+// }
 
 ?>
 
@@ -67,6 +73,7 @@ $workers = q16($date,$facility,$link);
                                                     <th>DOB</th>
                                                     <th>Tel</th>
                                                     <th>Email</th>
+                                                    <th>Potentially Exposed Workers</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -80,12 +87,31 @@ $workers = q16($date,$facility,$link);
         </tr>');
                                                 } else {
                                                     foreach ($workers as $w) {
-                                                        $fname = get_Fname($link,$w['workerId']);
-                                                        $lname = get_Lname($link,$w['workerId']);
-                                                        $dob = get_dob($link,$w['workerId']);
-                                                        $tel = get_tel($link,$w['workerId']);
-                                                        $email = get_email($w['workerId'],$link);
+                                                        $exposed_hcw = "";
+                                                        $facs = get_all_facilities_worked_at_14_days($w['patient'],$begin_date,$end,$link);
+                                                        //var_dump($w['patient']);
+                                                        //var_dump($begin_date);
+                                                        //var_dump($end);
+                                                        //var_dump($facs);
+                                                        foreach ($facs as $f) {
+                                                            //var_dump($f);
+                                                            $exposed = get_exposed_workers($f['facilityId'],$w['patient'],$link);
+                                                            foreach ($exposed as $x) {
+                                                                $full_name = get_full_name($link,$x['workerId']);
 
+                                                                if (strpos($exposed_hcw,$full_name) !== false) {
+                                                                    continue;
+                                                                } else {
+                                                                    $exposed_hcw .= $full_name.", ";
+                                                                }
+                                                            }
+                                                        }
+                                                        $fname = get_Fname($link,$w['patient']);
+                                                        $lname = get_Lname($link,$w['patient']);
+                                                        $dob = get_dob($link,$w['patient']);
+                                                        $tel = get_tel($link,$w['patient']);
+                                                        $email = get_email($w['patient'],$link);
+                                                        $exposed_list = rtrim($exposed_hcw, ", ");
                                                         echo ('<tr>');
                                                         echo ('<td>');
                                                         echo ($fname);
@@ -94,7 +120,7 @@ $workers = q16($date,$facility,$link);
                                                         echo ($lname);
                                                         echo  ('</td>');
                                                         echo ('<td>');
-                                                        echo ($w['workerId']);
+                                                        echo ($w['patient']);
                                                         echo  ('</td>');
                                                         echo ('<td>');
                                                         echo ($dob);
@@ -104,6 +130,9 @@ $workers = q16($date,$facility,$link);
                                                         echo  ('</td>');
                                                         echo ('<td>');
                                                         echo ($email);
+                                                        echo  ('</td>');
+                                                        echo ('<td>');
+                                                        echo ($exposed_list);
                                                         echo  ('</td>');
                                                         echo ('</tr>');
                                                     }

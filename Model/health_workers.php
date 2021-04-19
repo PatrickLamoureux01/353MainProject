@@ -56,3 +56,29 @@ function check_admin($medicare, $link) {
     return $isAdmin;
     
 }
+
+function q16($start,$end,$facility,$link) {
+
+    $result = 1;
+    $sql = "SELECT DISTINCT diagnostic.patient FROM diagnostic,person,publicHealthWorker WHERE person.medicareNum = publicHealthWorker.workerId AND diagnostic.testResult = ? AND diagnostic.facilityId = ? AND diagnostic.testDate BETWEEN ? AND ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'iiss', $result,$facility,$start,$end);
+    mysqli_stmt_execute($select_stmt);
+    $workers = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $workers;
+}
+
+function get_exposed_workers($id,$medicare,$link) {
+
+    $sql = "SELECT DISTINCT workerId FROM workedAt WHERE facilityId = ? AND workerId <> ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'ii',$id,$medicare);
+    mysqli_stmt_execute($select_stmt);
+    $workers = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $workers;
+
+}

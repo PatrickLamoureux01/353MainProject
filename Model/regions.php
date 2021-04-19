@@ -131,4 +131,32 @@ function get_region_of_person($id,$link) {
     return $region;
 
 }
+
+function get_num_pos_by_region($id,$link) {
+
+    $result = 1;
+    $sql = "SELECT region.name FROM person,cityPostal,regionCity,region,diagnostic WHERE person.postalCode = cityPostal.postalCode AND cityPostal.cityID = regionCity.cityID AND region.regionID = regionCity.regionID AND person.medicareNum = diagnostic.patient AND region.regionID = ? AND testResult = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'ii', $id,$result);
+    mysqli_stmt_execute($select_stmt);
+    $people = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return mysqli_num_rows($people);
+
+}
+
+function get_num_neg_by_region($id,$link) {
+
+    $result = 0;
+    $sql = "SELECT region.name FROM person,cityPostal,regionCity,region,diagnostic WHERE person.postalCode = cityPostal.postalCode AND cityPostal.cityID = regionCity.cityID AND region.regionID = regionCity.regionID AND person.medicareNum = diagnostic.patient AND region.regionID = ? AND testResult = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'ii', $id,$result);
+    mysqli_stmt_execute($select_stmt);
+    $people = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return mysqli_num_rows($people);
+
+}
 ?>

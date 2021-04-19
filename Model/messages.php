@@ -79,4 +79,17 @@ function get_messages_between_two_dates($start,$end,$link) {
 
 }
 
+function get_messages_between_two_dates_for_region($start,$end,$region,$link) {
+
+    $sql = "SELECT * FROM messages WHERE broadcastDateTime BETWEEN ? AND ? AND region = ?";
+    $select_stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($select_stmt, 'sss', $start,$end,$region);
+    mysqli_stmt_execute($select_stmt);
+    $msgs = mysqli_stmt_get_result($select_stmt);
+    mysqli_stmt_close($select_stmt);
+
+    return $msgs;
+
+}
+
 ?>
