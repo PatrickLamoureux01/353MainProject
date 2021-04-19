@@ -155,7 +155,9 @@ $groupzone = mysqli_fetch_array($f);
                         <h4 class="card-title" style="text-decoration:underline;">Group Zone Information</h4>
                         <p class="card-text"><strong>Group Zone ID:</strong> <?php echo ($groupzone['id']); ?></p>
                         <p class="card-text"><strong>Group Zone Name:</strong> <?php echo ($groupzone['name']); ?></p>
-                    </div>
+                        <button type="button" onclick="window.location.href='edit_groupzone.php?fid=<?php echo $groupzone['id']; ?>'" class="btn btn-secondary">Edit Group Zone</button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteGroupZoneModal" data-id="<?php echo $groupzone['id']; ?>" data-name="<?php echo $groupzone['name']; ?>">Delete</button>
+                     </div>
                 </div>
 
 
@@ -175,6 +177,7 @@ $groupzone = mysqli_fetch_array($f);
         </footer>
         <!-- End of Footer -->
 
+
     </div>
     <!-- End of Content Wrapper -->
 
@@ -189,8 +192,55 @@ $groupzone = mysqli_fetch_array($f);
 <!-- Logout Modal-->
 <?php include('../nav/logout.php'); ?>
 
-<?php include('../nav/footer.php'); ?>
+<!-- Delete GroupZone Modal-->
+<div class="modal fade" id="deleteGroupZoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to continue?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="delete_txt"></p>
+                <p id="tmp"></p>
+                <button type="button" onclick="delete_group_zone()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete GroupZone</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<?php include('../nav/footer.php'); ?>
+<script>
+
+    $('#deleteGroupZoneModal').on('shown.bs.modal', function(event) {
+
+
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var name = button.data('name') // Extract patient name
+        var id = button.data('id') // Extract patient ID
+
+        $('#delete_txt').html("You are about to delete <strong>" + name + "</strong> from the group zone records.");
+        $('#tmp').val(id);
+    });
+
+    function delete_group_zone() {
+
+        var id = $('#tmp').val();
+
+        $.ajax({
+            type: "POST",
+            url: "../Model/groupzone_processor.php?action=delete",
+            data: {
+                action: "delete",
+                id: id
+            }
+        }).done(function(msg) {
+            parent.window.location.reload();
+        });
+    }
+</script>
 </body>
 
 </html>
