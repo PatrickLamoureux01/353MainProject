@@ -166,7 +166,8 @@ $codes = get_postal_codes_by_city_id($cityID,$link);
                             }
                             ?></p>
                             </ul>
-                            
+                            <button type="button" onclick="window.location.href='edit_city.php?cid=<?php echo $city['cityID']; ?>'" class="btn btn-secondary">Edit City</button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteCityModal" data-id="<?php echo $city['cityID']; ?>" data-name="<?php echo $city['name']; ?>">Delete</button>
                         </div>
                     </div>
 
@@ -201,7 +202,56 @@ $codes = get_postal_codes_by_city_id($cityID,$link);
    <!-- Logout Modal-->
    <?php include('../nav/logout.php'); ?>
 
+      <!-- Delete City Modal-->
+      <div class="modal fade" id="deleteCityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to continue?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="delete2_txt"></p>
+                    <p id="tmp"></p>
+                    <button type="button" onclick="delete_city()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete City</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
    <?php include('../nav/footer.php'); ?>
+
+   <script>
+
+        $('#deleteCityModal').on('shown.bs.modal', function(event) {
+
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var name = button.data('name') // Extract patient name
+            var id = button.data('id') // Extract patient ID
+
+            $('#delete2_txt').html("You are about to delete <strong>" + name + "</strong> from the city records.");
+            $('#tmp').val(id);
+        });
+
+
+
+        function delete_city() {
+
+            var id = $('#tmp').val();
+
+            $.ajax({
+                type: "POST",
+                url: "../Model/region_city_processor.php?action=delete_city",
+                data: {
+                    id: id
+                }
+            }).done(function(msg) {
+                window.location.href = "../Region/view_regions_cities.php";
+            });
+        }
+    </script>
 
 </body>
 

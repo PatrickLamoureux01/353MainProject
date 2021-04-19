@@ -236,7 +236,7 @@ $publicHealthrec = mysqli_fetch_array($f);
                 id: id
             }
         }).done(function(msg) {
-            parent.window.location.reload();
+            window.location.href = "../PublicHealthRecommendation/view_publichealthrecommendations.php";
         });
     }
 </script>

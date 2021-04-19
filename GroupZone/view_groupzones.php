@@ -140,6 +140,7 @@ $groupzones = get_all_group_zones($link);
 
                     <div class="col pr-4 pt-4 text-right">
                         <a id="editbutton" class="m-0 pt-4 font-weight-bold text-primary" href="create_groupzone.php"><i class="fa fa-plus"></i> Create New Group Zone</a>
+                        <a id="editbutton" class="m-0 pt-4 font-weight-bold text-primary" href="add_to_groupzone.php"><i class="fa fa-plus"></i> Add People to a Group Zone</a>
                     </div>
 
                     <!-- Content Row -->
@@ -156,6 +157,7 @@ $groupzones = get_all_group_zones($link);
                                         <table class="table table-hover table-sm" id="groupZonesTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
+                                                    <th>GroupZone ID</th>
                                                     <th>Name</th>
                                                 </tr>
                                             </thead>
@@ -170,9 +172,10 @@ $groupzones = get_all_group_zones($link);
         </tr>');
                                                 } else {
                                                     foreach ($groupzones as $groupzone) {
-                                                        echo ('<tr><td class="clickable" data-href="view_groupzone.php?fid=');
+                                                        echo ('<tr><td>');
                                                         echo $groupzone['id'];
-                                                        echo ('">');
+                                                        echo ('</td>');
+                                                        echo ('<td>');
                                                         echo ($groupzone['name']);
                                                         echo ('</td></tr>');
                                                     }
@@ -226,7 +229,7 @@ $groupzones = get_all_group_zones($link);
 
             $('#groupZonesTable tbody').on('click', 'tr', function() {
             var data = table.row(this).data();
-            window.location.href = "view_groupzone.php?fid=" + data[2];
+            window.location.href = "view_groupzone.php?fid=" + data[0];
         });
 
         });

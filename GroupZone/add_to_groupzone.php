@@ -8,14 +8,20 @@ $link = $db->connect();
 $fname = get_Fname($link, $_SESSION["User"]);
 $fullname = get_full_name($link, $_SESSION["User"]);
 
-$facilities = get_all_health_centers($link);
+$gz = get_all_group_zones($link);
+$people = get_all_patients($link);
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
+
 <?php include('../nav/htmlheader.php'); ?>
-<title>View All Health Facilities</title>
+<title>Add to GroupZone - <?php echo $fname; ?></title>
+
+
+
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -135,78 +141,38 @@ $facilities = get_all_health_centers($link);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Health Facilities Overview</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Add to Group Zone</h1>
                     </div>
 
-                    <div class="col pr-4 pt-4 text-right">
-                        <a id="editbutton" class="m-0 pt-4 font-weight-bold text-primary" href="create_facility.php"><i class="fa fa-plus"></i> Create New Health Facility</a>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <div class="col-xl-12 mb-4">
-                            <!-- DataTales Example -->
-                            <div class="card shadow">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">All Health Facilities</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-sm" id="facilitiesTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Facility ID</th>
-                                                    <th>Name</th>
-                                                    <th>Phone Number</th>
-                                                    <th>Type</th>
-                                                    <th>Address</th>
-                                                    <th>Website</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                <?php
-
-                                                if (mysqli_num_rows($facilities) == 0) {
-                                                    echo ('<tr>
-          <td>   </td> 
-          <td> There are no health centers to display. </td> 
-        </tr>');
-                                                } else {
-                                                    foreach ($facilities as $facility) {
-                                                        echo ('<tr><td>');
-                                                        echo ($facility['facilityId']);
-                                                        echo ('</td><td>');
-                                                        echo ($facility['name']);
-                                                        echo ('</td><td class="clickable" data-href="view_facility.php?fid=');
-                                                        echo $facility['facilityId'];
-                                                        echo ('">');
-                                                        echo ($facility['phoneNum']);
-                                                        echo ('</td><td class="clickable" data-href="view_facility.php?fid=');
-                                                        echo $facility['facilityId'];
-                                                        echo ('">');
-                                                        echo ($facility['type']);
-                                                        echo ('</td><td class="clickable" data-href="view_facility.php?fid=');
-                                                        echo $facility['facilityId'];
-                                                        echo ('">');
-                                                        echo ($facility['address']);
-                                                        echo ('</td><td class="clickable" data-href="view_facility.php?fid=');
-                                                        echo $facility['facilityId'];
-                                                        echo ('">');
-                                                        echo ($facility['website']);
-                                                        echo ('</td></tr>');
-                                                    }
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                    <form action="../Model/groupzone_processor.php?action=add_people" method="post">
+                        <div class="form-group">
+                            <label for="gz" class="my-1 mr-2">Group Zone</label><br>
+                            <select class="selectpicker" id="gz" name="gz" data-live-search="true">
+                                <?php
+                                foreach ($gz as $g) {
+                                ?>
+                                    <option value="<?php echo $g['id']; ?>"><?php echo $g['name']; ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="people" class="my-1 mr-2">People</label><br>
+                            <select class="selectpicker" id="people" name="people[]"  multiple data-selected-text-format="count > 3" data-live-search="true" data-actions-box="true">
+                                <?php
+                                foreach ($people as $p) {
+                                ?>
+                                    <option value="<?php echo $p['medicareNum']; ?>"><?php echo $p['firstName']." ".$p['lastName']; ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
                         </div>
 
-                    </div>
+                        <button type="submit" class="btn btn-outline-primary">Add People to Group Zone</button>
+
+                    </form>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -235,25 +201,10 @@ $facilities = get_all_health_centers($link);
         <i class="fas fa-angle-up"></i>
     </a>
 
-   <!-- Logout Modal-->
-   <?php include('../nav/logout.php'); ?>
-
-   
+    <!-- Logout Modal-->
+    <?php include('../nav/logout.php'); ?>
 
     <?php include('../nav/footer.php'); ?>
-
-    <script>
-        $(document).ready(function() {
-            var table = $('#facilitiesTable').DataTable();
-
-            $('#facilitiesTable tbody').on('click', 'tr', function() {
-                var data = table.row(this).data();
-                window.location.href = "view_facility.php?fid=" + data[0];
-            });
-
-        });
-
-    </script>
 
 </body>
 

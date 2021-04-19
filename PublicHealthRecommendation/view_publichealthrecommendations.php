@@ -156,6 +156,7 @@ $healthrec = get_all_public_health_rec($link);
                                         <table class="table table-hover table-sm" id="publicHealthRecTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
+                                                    <th>Recommendation ID</th>
                                                     <th>Recommendation</th>
                                                     <th>Alert Level</th>
                                                 </tr>
@@ -171,15 +172,17 @@ $healthrec = get_all_public_health_rec($link);
         </tr>');
                                                 } else {
                                                     foreach ($healthrec as $rec) {
-                                                        echo ('<tr><td class="clickable" data-href="view_publichealthrecommendation.php?fid=');
-                                                        echo $rec['recommendationID'];
-                                                        echo ('">');
+                                                        echo ('<tr>');
+                                                        echo ('<td>');
+                                                        echo ($rec['recommendationID']);
+                                                        echo ('</td>');
+                                                        echo ('<td>');
                                                         echo ($rec['recommendation']);
-                                                        echo ('</td><td class="clickable" data-href="view_publichealthrecommendation.php?fid=');
-                                                        echo $rec['recommendationID'];
-                                                        echo ('">');
+                                                        echo ('</td>');
+                                                        echo ('<td>');
                                                         echo ($rec['alertLevel']);
-                                                        echo ('</td></tr>');
+                                                        echo ('</td>');
+                                                        echo ('</tr>');
                                                     }
                                                 }
                                                 ?>
@@ -232,7 +235,7 @@ $healthrec = get_all_public_health_rec($link);
 
             $('#publicHealthRecTable tbody').on('click', 'tr', function() {
                 var data = table.row(this).data();
-                window.location.href = "view_publichealthrecommendation.php?fid=" + data[2];
+                window.location.href = "view_publichealthrecommendation.php?fid=" + data[0];
             });
 
         });

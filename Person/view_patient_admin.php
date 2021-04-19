@@ -10,12 +10,15 @@ $fullname = get_full_name($link, $_SESSION["User"]);
 
 $patientID = $_GET["pid"];
 
-$patient_name = get_full_name($link,$patientID);
+$patient_name = get_full_name($link, $patientID);
 
 $p = get_patient_by_medicare($link, $patientID);
 $patient = mysqli_fetch_array($p);
 
-$isAdmin = check_admin($_SESSION["User"],$link);
+$isAdmin = check_admin($_SESSION["User"], $link);
+
+$gz = get_all_groupzones_of_one_person($patientID,$link);
+
 
 ?>
 
@@ -23,7 +26,7 @@ $isAdmin = check_admin($_SESSION["User"],$link);
 <html lang="en">
 
 <?php include('../nav/htmlheader.php'); ?>
-<title>View Patient - <?php echo $patient['firstName'] ." ". $patient['lastName']; ?></title>
+<title>View Patient - <?php echo $patient['firstName'] . " " . $patient['lastName']; ?></title>
 
 <body id="page-top">
 
@@ -34,9 +37,9 @@ $isAdmin = check_admin($_SESSION["User"],$link);
 
         <?php
         if ($isAdmin == 0) {
-            include('../nav/hcw_sidebar.php'); 
+            include('../nav/hcw_sidebar.php');
         } else {
-            include('../nav/admin_sidebar.php'); 
+            include('../nav/admin_sidebar.php');
         }
         ?>
 
@@ -54,7 +57,7 @@ $isAdmin = check_admin($_SESSION["User"],$link);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800"><?php echo $patient_name?>'s Full Profile</h1>
+                        <h1 class="h3 mb-0 text-gray-800"><?php echo $patient_name ?>'s Full Profile</h1>
                     </div>
 
                     <div class="card flex-row flex-wrap">
@@ -73,51 +76,64 @@ $isAdmin = check_admin($_SESSION["User"],$link);
                             <p class="card-text"><strong>Province:</strong> <?php echo ($patient['province']); ?></p>
                             <p class="card-text"><strong>Address:</strong> <?php echo ($patient['address']); ?></p>
                             <p class="card-text"><strong>Postal Code:</strong> <?php echo ($patient['postalCode']); ?></p>
-                            <button type="button" onclick="window.location.href='edit_patient.php?pid=<?php echo $patient['medicareNum'];?>'" class="btn btn-secondary" >Edit Patient</button>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePatientModal" data-id="<?php echo $patient['medicareNum']; ?>"
-                            data-name="<?php echo $patient['firstName']." ".$patient['lastName']; ?>">Delete</button>
+                            <p class="card-text"><strong>Member Of:</strong>
+                            <?php
+                            if (mysqli_num_rows($gz) == 0) {
+                                echo "This patient is not a member of any group zone.";
+                            } else {
+
+                            }?><ul><?php
+                            foreach($gz as $g) {
+                                ?>
+                                    <li><?php echo get_gz_name_by_id($g['groupZoneId'],$link); ?></li>
+                                <?php
+                            }
+                            ?></p>
+                            </ul>
+                            <button type="button" onclick="window.location.href='edit_patient.php?pid=<?php echo $patient['medicareNum']; ?>'" class="btn btn-secondary">Edit Patient</button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePatientModal" data-id="<?php echo $patient['medicareNum']; ?>" data-name="<?php echo $patient['firstName'] . " " . $patient['lastName']; ?>">Delete</button>
                         </div>
                         <div class="card-box px-2">
-                        <h4 class="card-title" style="text-decoration:underline;">Symptom Information</h4>
+                            <h4 class="card-title" style="text-decoration:underline;">Symptom Information</h4>
                             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                                 <div class="row">
                                     <div class="col"><select name="test" id="test" class="selectpicker form-control" data-live-search="true">
-                                        <?php
-                                        $test_dates = get_pos_tests($link, $patientID);
-                                        foreach ($test_dates as $td) {
-                                        ?>
-                                            <option value="<?php echo $td['testDate']; ?>"><?php echo $td['testDate']; ?></option>
-                                        <?php
-                                        } ?>
-                                    </select></div>
+                                            <?php
+                                            $test_dates = get_pos_tests($link, $patientID);
+                                            foreach ($test_dates as $td) {
+                                            ?>
+                                                <option value="<?php echo $td['testDate']; ?>"><?php echo $td['testDate']; ?></option>
+                                            <?php
+                                            } ?>
+                                        </select></div>
                                     <div class="col"><button type="submit" class="btn btn-primary">Get Symptoms</button></div>
 
                                 </div>
-                                <input type="hidden" name="medicareNum" value=<?php echo $patientID;?>>
+                                <input type="hidden" name="medicareNum" value=<?php echo $patientID; ?>>
 
                             </form>
-                            
+
                             <?php
-                            if($_SERVER["REQUEST_METHOD"]=="POST"){
+                            if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $med = $_POST["medicareNum"];
                                 $testDate = $_POST["test"];
-                                $list = get_test_symptoms($med,$testDate,$link);
-                                foreach($list as $e){
-                                    echo "<p class='card-text'>".$e["symptom"]."</p>";
+                                $list = get_test_symptoms($med, $testDate, $link);
+                                foreach ($list as $e) {
+                                    echo "<p class='card-text'>" . $e["symptom"] . "</p>";
                                 }
-                                
 
-                            echo $_SERVER['QUERY_STRING'];
-                            // header("Location: ../view_patient.php?pid=209672");
-                            //header("Location:./Person/view_patient.php?pid=209672");
+
+                                echo $_SERVER['QUERY_STRING'];
+                                // header("Location: ../view_patient.php?pid=209672");
+                                //header("Location:./Person/view_patient.php?pid=209672");
                             }
-                            
-                            
+
+
 
 
                             ?>
 
-                            
+
 
 
                         </div>
@@ -147,8 +163,8 @@ $isAdmin = check_admin($_SESSION["User"],$link);
     <!-- Logout Modal-->
     <?php include('../nav/logout.php'); ?>
 
-        <!-- Delete Patient Modal-->
-        <div class="modal fade" id="deletePatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Delete Patient Modal-->
+    <div class="modal fade" id="deletePatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -169,7 +185,6 @@ $isAdmin = check_admin($_SESSION["User"],$link);
     <?php include('../nav/footer.php'); ?>
 
     <script>
-
         $('#deletePatientModal').on('shown.bs.modal', function(event) {
 
 
@@ -193,7 +208,7 @@ $isAdmin = check_admin($_SESSION["User"],$link);
                     id: id
                 }
             }).done(function(msg) {
-                window.location.href = "Person/view_patients_admin.php";
+                window.location.href = "../Person/view_patients_admin.php";
             });
         }
     </script>

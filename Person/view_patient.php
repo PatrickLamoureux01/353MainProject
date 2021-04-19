@@ -17,6 +17,8 @@ $patient = mysqli_fetch_array($p);
 
 $isAdmin = check_admin($_SESSION["User"],$link);
 
+$gz = get_all_groupzones_of_one_person($patientID,$link);
+
 ?>
 
 <!DOCTYPE html>
@@ -69,6 +71,20 @@ $isAdmin = check_admin($_SESSION["User"],$link);
                             <p class="card-text"><strong>Province:</strong> <?php echo ($patient['province']); ?></p>
                             <p class="card-text"><strong>Address:</strong> <?php echo ($patient['address']); ?></p>
                             <p class="card-text"><strong>Postal Code:</strong> <?php echo ($patient['postalCode']); ?></p>
+                            <p class="card-text"><strong>Member Of:</strong>
+                            <?php
+                            if (mysqli_num_rows($gz) == 0) {
+                                echo "This patient is not a member of any group zone.";
+                            } else {
+
+                            }?><ul><?php
+                            foreach($gz as $g) {
+                                ?>
+                                    <li><?php echo get_gz_name_by_id($g['groupZoneId'],$link); ?></li>
+                                <?php
+                            }
+                            ?></p>
+                            </ul>
                         </div>
                         <div class="card-box px-2">
                         <h4 class="card-title" style="text-decoration:underline;">Symptom Information</h4>

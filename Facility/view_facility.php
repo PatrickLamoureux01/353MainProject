@@ -178,6 +178,8 @@ $facility = mysqli_fetch_array($f);
                                 echo "Both Appointment and Walk-In";
                             }
                             ?></p>
+                            <button type="button" onclick="window.location.href='edit_facility.php?fid=<?php echo $facility['facilityId']; ?>'" class="btn btn-secondary">Edit Facility</button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteFacilityModal" data-id="<?php echo $facility['facilityId']; ?>" data-name="<?php echo $facility['name']; ?>">Delete</button>
                         </div>
                     </div>
 
@@ -212,7 +214,57 @@ $facility = mysqli_fetch_array($f);
    <!-- Logout Modal-->
    <?php include('../nav/logout.php'); ?>
 
+    <!-- Delete Facility Modal-->
+    <div class="modal fade" id="deleteFacilityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to continue?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="delete_txt"></p>
+                    <p id="tmp"></p>
+                    <button type="button" onclick="delete_facility()" id="reject_ft" name="reject_ft" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">Delete Facility</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
    <?php include('../nav/footer.php'); ?>
+
+   <script>
+       
+
+        $('#deleteFacilityModal').on('shown.bs.modal', function(event) {
+
+
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var name = button.data('name') // Extract patient name
+            var id = button.data('id') // Extract patient ID
+
+            $('#delete_txt').html("You are about to delete <strong>" + name + "</strong> from the health facilities records.");
+            $('#tmp').val(id);
+        });
+
+        function delete_facility() {
+
+            var id = $('#tmp').val();
+
+            $.ajax({
+                type: "POST",
+                url: "../Model/facility_processor.php?action=delete",
+                data: {
+                    action: "delete",
+                    id: id
+                }
+            }).done(function(msg) {
+                window.location.href = "../Facility/view_facilities.php";
+            });
+        }
+    </script>
 
 </body>
 

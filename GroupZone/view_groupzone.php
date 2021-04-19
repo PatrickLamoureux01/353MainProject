@@ -237,7 +237,7 @@ $groupzone = mysqli_fetch_array($f);
                 id: id
             }
         }).done(function(msg) {
-            parent.window.location.reload();
+            window.location.href = "../GroupZone/view_groupzones.php";
         });
     }
 </script>

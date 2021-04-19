@@ -150,7 +150,7 @@ $isAdmin = check_admin($personID, $link);
                     id: id
                 }
             }).done(function(msg) {
-                window.location.href="HealthWorker/view_health_workers.php"
+                window.location.href="../HealthWorker/view_health_workers.php"
             });
         }
     </script>

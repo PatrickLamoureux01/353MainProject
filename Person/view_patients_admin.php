@@ -174,32 +174,6 @@ $patients = get_all_patients($link);
 
         });
 
-        $('#deletePatientModal').on('shown.bs.modal', function(event) {
-
-
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var name = button.data('name') // Extract patient name
-            var id = button.data('id') // Extract patient ID
-
-            $('#delete_txt').html("You are about to delete <strong>" + name + "</strong> from the patient records.");
-            $('#tmp').val(id);
-        });
-
-        function delete_patient() {
-
-            var id = $('#tmp').val();
-
-            $.ajax({
-                type: "POST",
-                url: "../Model/patient_processor.php?action=delete",
-                data: {
-                    action: "delete",
-                    id: id
-                }
-            }).done(function(msg) {
-                parent.window.location.reload();
-            });
-        }
     </script>
 
 </body>
